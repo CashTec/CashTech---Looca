@@ -1,5 +1,22 @@
 package cashtech.jar;
 
+import com.github.britooo.looca.api.core.Looca;
+import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.memoria.Memoria;
+import com.github.britooo.looca.api.group.processador.Processador;
+import com.github.britooo.looca.api.group.processos.Processo;
+import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
+import com.github.britooo.looca.api.group.rede.Rede;
+import com.github.britooo.looca.api.group.rede.RedeInterface;
+import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
+import com.github.britooo.looca.api.group.sistema.Sistema;
+import java.awt.Color;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /*
@@ -15,6 +32,16 @@ public class LoginSwing extends javax.swing.JFrame {
     /**
      * Creates new form LoginSwing
      */
+    Looca looca = new Looca();
+    Sistema sistema = looca.getSistema();
+    Memoria memoria = looca.getMemoria();
+    Processador processador = looca.getProcessador();
+    DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
+    ProcessoGrupo grupoDeProcessos = looca.getGrupoDeProcessos();
+    Rede rede = looca.getRede();
+    RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
+    List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
+
     public LoginSwing() {
         initComponents();
     }
@@ -205,20 +232,71 @@ public class LoginSwing extends javax.swing.JFrame {
 
         JdbcTemplate con = conexao.getConnection();
         con.update("insert into sistema values (null, 'linux','asd','1231')");
-        
+
         if (usuario.isEmpty() || senha.isEmpty()) {
-            verificaLogin.setText("O usuário e/ou senha está incorreto!");
-            System.out.println();
+            verificaLogin.setText("Complete todos os campos!");
         } else {
-            System.out.println("Login efetuado com sucesso!");
+            verificaLogin.setForeground(new Color(0, 128, 0));
+            verificaLogin.setText("Login efetuado com sucesso!");
+            matarProcesso();
         }
 // TODO add your handling code here:
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    public void matarProcesso() {
+        // Verificar sistema operacional
+        Boolean isLinux;
+        if (sistema.getSistemaOperacional().equals("Windows")) {
+            isLinux = false;
+        } else {
+            isLinux = true;
+        }
+
+        // Lista de processos permitidos são os primeiros processos que carrega
+        List<Processo> processosPermitidos = new ArrayList(grupoDeProcessos.getProcessos());
+
+        // Passar esses processos para apenas o nome
+        List<String> nomeProcessosPermitidos = new ArrayList();
+        for (Processo processo : processosPermitidos) {
+            if (!nomeProcessosPermitidos.contains(processo.getNome())) {
+                nomeProcessosPermitidos.add(processo.getNome());
+            }
+        }
+        System.out.println(nomeProcessosPermitidos);
+
+        // ========= Matar processos a cada x segundos ===========
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                // Leitura dos processos atuais
+                List<Processo> processosLido = grupoDeProcessos.getProcessos();
+
+                for (Processo processoLido : processosLido) {
+                    // Se o processo não for econtrado, executar kill
+                    if (!nomeProcessosPermitidos.contains(processoLido.getNome())) {
+                        String comando = isLinux
+                                ? "pkill -f " + processoLido.getNome()
+                                : "TASKKILL /F /IM " + processoLido.getNome() + ".exe";
+                        try {
+                            Runtime.getRuntime().exec(comando);
+                            System.out.println("\nNome: " + processoLido.getNome());
+                            System.out.println("DataHora: " + LocalDateTime.now());
+                            System.out.println(processoLido);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                }
+            }
+        }, 0, 2000);
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
