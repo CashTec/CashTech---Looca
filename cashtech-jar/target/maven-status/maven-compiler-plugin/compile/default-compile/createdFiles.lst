@@ -1,4 +1,6 @@
+services\KillProcessos$1.class
 cashtech\jar\DataBase.class
+services\CadastrarMaquina.class
 cashtech\jar\LoginSwing$1.class
-cashtech\jar\LoginSwing$2.class
+services\KillProcessos.class
 cashtech\jar\LoginSwing.class
