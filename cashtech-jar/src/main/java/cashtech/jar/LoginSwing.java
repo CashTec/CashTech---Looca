@@ -1,23 +1,8 @@
 package cashtech.jar;
 
-import com.github.britooo.looca.api.core.Looca;
-import com.github.britooo.looca.api.group.discos.DiscoGrupo;
-import com.github.britooo.looca.api.group.memoria.Memoria;
-import com.github.britooo.looca.api.group.processador.Processador;
-import com.github.britooo.looca.api.group.processos.Processo;
-import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
-import com.github.britooo.looca.api.group.rede.Rede;
-import com.github.britooo.looca.api.group.rede.RedeInterface;
-import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
-import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.awt.Color;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import org.springframework.jdbc.core.JdbcTemplate;
+import services.CadastrarMaquina;
+import services.KillProcessos;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -32,19 +17,12 @@ public class LoginSwing extends javax.swing.JFrame {
     /**
      * Creates new form LoginSwing
      */
-    Looca looca = new Looca();
-    Sistema sistema = looca.getSistema();
-    Memoria memoria = looca.getMemoria();
-    Processador processador = looca.getProcessador();
-    DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
-    ProcessoGrupo grupoDeProcessos = looca.getGrupoDeProcessos();
-    Rede rede = looca.getRede();
-    RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
-    List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
-
     public LoginSwing() {
         initComponents();
     }
+
+    KillProcessos killProcessos = new KillProcessos();
+    CadastrarMaquina cadastrarMaquina = new CadastrarMaquina();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -225,71 +203,19 @@ public class LoginSwing extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String usuario = txtUsuario.getText();
         String senha = txtSenha.getText();
-        DataBase conexao = new DataBase();
-
-        JdbcTemplate con = conexao.getConnection();
-        con.update("insert into sistema values (null, 'linux','asd','1231')");
 
         if (usuario.isEmpty() || senha.isEmpty()) {
             verificaLogin.setText("Complete todos os campos!");
         } else {
             verificaLogin.setForeground(new Color(0, 128, 0));
             verificaLogin.setText("Login efetuado com sucesso!");
-            matarProcesso();
+            Integer idATM = cadastrarMaquina.executarCadastro();
+            killProcessos.monitorar(idATM);
+            
         }
-// TODO add your handling code here:
-    }//GEN-LAST:event_btnLoginActionPerformed
-
-    public void matarProcesso() {
-        // Verificar sistema operacional
-        Boolean isLinux;
-        if (sistema.getSistemaOperacional().equals("Windows")) {
-            isLinux = false;
-        } else {
-            isLinux = true;
-        }
-
-        // Lista de processos permitidos são os primeiros processos que carrega
-        List<Processo> processosPermitidos = new ArrayList(grupoDeProcessos.getProcessos());
-
-        // Passar esses processos para apenas o nome
-        List<String> nomeProcessosPermitidos = new ArrayList();
-        for (Processo processo : processosPermitidos) {
-            if (!nomeProcessosPermitidos.contains(processo.getNome())) {
-                nomeProcessosPermitidos.add(processo.getNome());
-            }
-        }
-        System.out.println(nomeProcessosPermitidos);
-
-        // ========= Matar processos a cada x segundos ===========
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                // Leitura dos processos atuais
-                List<Processo> processosLido = grupoDeProcessos.getProcessos();
-
-                for (Processo processoLido : processosLido) {
-                    // Se o processo não for econtrado, executar kill
-                    if (!nomeProcessosPermitidos.contains(processoLido.getNome())) {
-                        String comando = isLinux
-                                ? "pkill -f " + processoLido.getNome()
-                                : "TASKKILL /F /IM " + processoLido.getNome() + ".exe";
-                        try {
-                            Runtime.getRuntime().exec(comando);
-                            System.out.println("\nNome: " + processoLido.getNome());
-                            System.out.println("DataHora: " + LocalDateTime.now());
-                            System.out.println(processoLido);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                }
-            }
-        }, 0, 2000);
     }
 
     /**
