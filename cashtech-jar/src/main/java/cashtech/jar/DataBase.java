@@ -13,16 +13,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class DataBase {
 
+    // Desenvolvimento ou producao
     private String ambiente = "desenvolvimento";
 
+    // Porta padrão 3306
     private String porta = "3307";
 
-    private String servidorNuvem = "";
+    // Servidor da Azure
+    private String servidorNuvem = "svr-cashtech.database.windows.net";
 
+    // Banco da Azure = bd-cashtech
     private String bancoDeDados = "cashtech";
 
+    // Login da Azure = admin-cashtech
     private String login = "root";
 
+    // Senha da Azure = #Gfgrupo10
     private String senha = "root";
 
     private JdbcTemplate connection;
@@ -31,9 +37,15 @@ public class DataBase {
         BasicDataSource dataSource = new BasicDataSource();
 
         if (ambiente.equals("producao")) {
+
             dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-            dataSource.setUrl(String.format("jdbc:sqlserver://%s/%s", servidorNuvem, bancoDeDados));
+            dataSource.setUrl(String.format("jdbc:sqlserver://"
+                    + "%s:1433;"
+                    + "database=%s;"
+                    + "encrypt=true;"
+                    + "trustServerCertificate=false;"
+                    + "hostNameInCertificate=*.database.windows.net;", servidorNuvem, bancoDeDados));
 
         } else {
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
@@ -45,7 +57,6 @@ public class DataBase {
         dataSource.setUsername(login);
         dataSource.setPassword(senha);
 
-
         this.connection = new JdbcTemplate(dataSource);
 
     }
@@ -55,4 +66,9 @@ public class DataBase {
         return connection;
 
     }
+
+    public String getAmbiente() {
+        return ambiente;
+    }
+
 }

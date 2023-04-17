@@ -49,6 +49,15 @@
             <artifactId>h2</artifactId>
             <version>1.4.199</version>
         </dependency>
+
+        <!--Driver do SqlServer-->        
+        <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>12.2.0.jre11</version>
+        </dependency>
+
         <!-- ==================================================== -->
     </dependencies>
     

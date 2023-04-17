@@ -4,8 +4,6 @@
  */
 package services;
 
-import cashtech.jar.DataBase;
-import org.springframework.jdbc.core.JdbcTemplate;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.memoria.Memoria;

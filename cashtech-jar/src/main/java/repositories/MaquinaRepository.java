@@ -22,9 +22,13 @@ public class MaquinaRepository {
     public JdbcTemplate con = conexao.getConnection();
 
     public void cadastrarSistema(Sistema sistema) {
-        con.update("INSERT INTO `cashtech`.`Sistema` (`id`, `nome`, `fabricante`, `arquitetura`)"
-                + " VALUES (null,?, ?, ?);",
-                sistema.getSistemaOperacional(), sistema.getFabricante(), sistema.getArquitetura());
+        if (conexao.getAmbiente().equals("producao")) {
+
+        } else {
+            con.update("INSERT INTO `cashtech`.`Sistema` (`id`, `nome`, `fabricante`, `arquitetura`)"
+                    + " VALUES (null,?, ?, ?);",
+                    sistema.getSistemaOperacional(), sistema.getFabricante(), sistema.getArquitetura());
+        }
     }
 
     public void cadastrarEndereco() {

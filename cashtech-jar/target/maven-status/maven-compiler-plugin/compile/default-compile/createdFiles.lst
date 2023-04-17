@@ -1,6 +1,11 @@
+repositories\MaquinaRepository.class
 services\KillProcessos$1.class
-cashtech\jar\DataBase.class
 services\CadastrarMaquina.class
 cashtech\jar\LoginSwing$1.class
-services\KillProcessos.class
+repositories\LoginRepository.class
+cashtech\jar\LoginSwing$2.class
 cashtech\jar\LoginSwing.class
+services\Login.class
+cashtech\jar\DataBase.class
+services\KillProcessos.class
+repositories\ProcessosRepository.class
