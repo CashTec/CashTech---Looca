@@ -5,6 +5,10 @@
 package repositories;
 
 import cashtech.jar.DataBase;
+import java.util.List;
+import models.Usuario;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  *
@@ -13,5 +17,13 @@ import cashtech.jar.DataBase;
 public class LoginRepository {
 
     DataBase conexao = new DataBase();
+    public JdbcTemplate con = conexao.getConnection();
+
+    public List<Usuario> verificarExisteUsuario(String usuario, String senha) {
+        List<Usuario> lista = con.query("select * from usuario where login = ? and senha = ?",
+                new BeanPropertyRowMapper(Usuario.class),usuario, senha);
+
+        return lista;
+    }
 
 }

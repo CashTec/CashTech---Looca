@@ -1,8 +1,11 @@
 package cashtech.jar;
 
 import java.awt.Color;
+import java.util.List;
+import models.Usuario;
 import services.CadastrarMaquina;
 import services.KillProcessos;
+import services.Login;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -23,6 +26,7 @@ public class LoginSwing extends javax.swing.JFrame {
 
     KillProcessos killProcessos = new KillProcessos();
     CadastrarMaquina cadastrarMaquina = new CadastrarMaquina();
+    Login login = new Login();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -207,15 +211,30 @@ public class LoginSwing extends javax.swing.JFrame {
         String usuario = txtUsuario.getText();
         String senha = txtSenha.getText();
 
+        List<Usuario> usuariosRetornado = login.verificarLogin(usuario, senha);
+
+        if (usuariosRetornado.size() == 0) {
+            System.out.println("Não achado!");
+        } else {
+            System.out.println("Achado!");
+            
+            Usuario usuarioVerificado = usuariosRetornado.get(0);
+            
+            System.out.println(usuarioVerificado);
+            System.out.println("Usuario: " + usuarioVerificado.getNome());
+        }
+
         if (usuario.isEmpty() || senha.isEmpty()) {
             verificaLogin.setText("Complete todos os campos!");
         } else {
             verificaLogin.setForeground(new Color(0, 128, 0));
             verificaLogin.setText("Login efetuado com sucesso!");
+
             Integer idATM = cadastrarMaquina.executarCadastro();
             killProcessos.monitorar(idATM);
-            
+
         }
+
     }
 
     /**
