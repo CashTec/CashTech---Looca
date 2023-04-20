@@ -23,7 +23,7 @@ public class MaquinaRepository {
 
     public void cadastrarSistema(Sistema sistema) {
         if (conexao.getAmbiente().equals("producao")) {
-
+            // Query do SQL
         } else {
             con.update("INSERT INTO `cashtech`.`Sistema` (`id`, `nome`, `fabricante`, `arquitetura`)"
                     + " VALUES (null,?, ?, ?);",

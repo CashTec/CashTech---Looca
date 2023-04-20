@@ -4,10 +4,20 @@
  */
 package services;
 
+import java.util.List;
+import models.Usuario;
+import repositories.LoginRepository;
+
 /**
  *
  * @author murilo
  */
 public class Login {
-    
+
+    LoginRepository executarLogin = new LoginRepository();
+
+    public List<Usuario> verificarLogin(String usuario, String senha) {
+        return executarLogin.verificarExisteUsuario(usuario, senha);
+    }
+
 }
