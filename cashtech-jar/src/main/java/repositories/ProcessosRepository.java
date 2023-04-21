@@ -27,11 +27,24 @@ public class ProcessosRepository {
     Looca looca = new Looca();
     Processo processo;
 
-    public List<String> processosPermitidos() {
+    public void cadastrarProcessosPermitidosPadrao(List<String> processos, Integer empresaId) {
 
+        String sql = "INSERT INTO `cashtech`.`ProcessoPermitido` (`id`, `nome`, `empresa_id`) VALUES ";
+        for (int i = 0; i < processos.size(); i++) {
+            String processo = processos.get(i);
+            if (i == processos.size() - 1) {
+                sql += String.format("(null,'%s',%d)", processo, empresaId);
+            } else {
+                sql += String.format("(null,'%s',%d), ", processo, empresaId);
+            }
+        }
+        con.update(sql);
+    }
+
+    public List<String> processosPermitidos(Integer empresaId) {
         List<String> processosPermitidos
-                = con.query("select nome from ProcessoPermitido",
-                        new SingleColumnRowMapper(String.class));
+                = con.query("select nome from ProcessoPermitido where empresa_id = ?",
+                        new SingleColumnRowMapper(String.class), empresaId);
 
         return processosPermitidos;
     }

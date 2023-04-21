@@ -18,12 +18,13 @@ import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.util.ArrayList;
 import java.util.List;
 import repositories.MaquinaRepository;
+import repositories.ProcessosRepository;
 
 /**
  *
  * @author murilo
  */
-public class CadastrarMaquina {
+public class MaquinaService {
 
     Looca looca = new Looca();
     Sistema sistema = looca.getSistema();
@@ -37,10 +38,12 @@ public class CadastrarMaquina {
     List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
 
     MaquinaRepository executar = new MaquinaRepository();
-
+    ProcessosRepository executarProcesso = new ProcessosRepository();
+    
     public void executarCadastro(Integer empresaId) {
         executar.cadastrarSistema(sistema);
         executar.cadastrarEndereco();
+        
         executar.cadastrarMaquina(parametros, empresaId);
         
         // =============== Cadastrar Processos permitidos ================
@@ -54,8 +57,14 @@ public class CadastrarMaquina {
                 nomeProcessosPermitidos.add(processo.getNome());
             }
         }
-        executar.cadastrarProcessosPermitidosPadrao(nomeProcessosPermitidos);
+        executarProcesso.cadastrarProcessosPermitidosPadrao(nomeProcessosPermitidos, empresaId);
         // ==================================================================
+    }
+    
+    
+    public Integer identificarMaquina() {
+        List<Integer> listaID = executar.buscarIdMaquina(rede.getParametros().getHostName());
+        return listaID.get(0);
     }
 
 }

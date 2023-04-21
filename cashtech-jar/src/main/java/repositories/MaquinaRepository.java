@@ -9,6 +9,7 @@ import com.github.britooo.looca.api.group.rede.RedeParametros;
 import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 
 /**
  *
@@ -42,22 +43,11 @@ public class MaquinaRepository {
                 + "(`id`, `identificador`, `situacao`, `empresa_id`, `endereco_id`, `sistema_id`) "
                 + "VALUES (NULL,?,'ativo', ?, (select id from endereco order by id desc limit 1),"
                 + "(select id from sistema order by id desc limit 1));",
-                parametros.getHostName(),empresa_id);
+                parametros.getHostName(), empresa_id);
 
     }
 
-    public void cadastrarProcessosPermitidosPadrao(List<String> processos) {
-
-        String sql = "INSERT INTO `cashtech`.`ProcessoPermitido` (`id`, `nome`, `empresa_id`) VALUES ";
-        for (int i = 0; i < processos.size(); i++) {
-            String processo = processos.get(i);
-            if (i == processos.size() - 1) {
-                sql += String.format("(null,'%s',1)", processo);
-            } else {
-                sql += String.format("(null,'%s',1), ", processo);
-            }
-        }
-        con.update(sql);
+    public List<Integer> buscarIdMaquina(String nomeMaquina) {
+        return con.query("select id from caixaeletronico", new SingleColumnRowMapper(Integer.class));
     }
-
 }

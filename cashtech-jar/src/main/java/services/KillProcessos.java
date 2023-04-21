@@ -27,7 +27,7 @@ public class KillProcessos {
     ProcessoGrupo grupoDeProcessos = looca.getGrupoDeProcessos();
     ProcessosRepository execute = new ProcessosRepository();
 
-    public void monitorar(Integer idAtm) {
+    public void monitorar(Integer idAtm, Integer idEmpresa) {
         // Verificar sistema operacional
         Boolean isLinux;
         if (sistema.getSistemaOperacional().equals("Windows")) {
@@ -37,7 +37,7 @@ public class KillProcessos {
         }
 
         // Verificar processos permitidos do banco
-        List<String> processosPermitidos = execute.processosPermitidos();
+        List<String> processosPermitidos = execute.processosPermitidos(idEmpresa);
 
         // ========= Matar processos a cada x segundos ===========
         new Timer().scheduleAtFixedRate(new TimerTask() {

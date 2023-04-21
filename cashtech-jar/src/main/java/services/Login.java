@@ -34,9 +34,4 @@ public class Login {
         List<Map<String, Object>> listaMaquina = executarLogin.verificarMaquina(hostName);
         return !listaMaquina.isEmpty();
     }
-
-    public Integer identificarMaquina() {
-        List<Integer> listaID = executarLogin.buscarIdMaquina(rede.getParametros().getHostName());
-        return listaID.get(0);
-    }
 }

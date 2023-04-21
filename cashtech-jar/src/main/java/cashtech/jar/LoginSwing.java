@@ -3,7 +3,7 @@ package cashtech.jar;
 import java.awt.Color;
 import java.util.List;
 import models.Usuario;
-import services.CadastrarMaquina;
+import services.MaquinaService;
 import services.KillProcessos;
 import services.Login;
 
@@ -25,7 +25,7 @@ public class LoginSwing extends javax.swing.JFrame {
     }
 
     KillProcessos killProcessos = new KillProcessos();
-    CadastrarMaquina cadastrarMaquina = new CadastrarMaquina();
+    MaquinaService maquinaService = new MaquinaService();
     Login login = new Login();
 
     /**
@@ -224,14 +224,15 @@ public class LoginSwing extends javax.swing.JFrame {
             verificaLogin.setForeground(new Color(0, 128, 0));
             verificaLogin.setText("Login efetuado com sucesso!");
 
+            Integer idEmpresa = usuarioVerificado.getEmpresa_id();
             if (!login.hasMaquina()) {
                 // Cadastrar Máquina
-                cadastrarMaquina.executarCadastro(usuarioVerificado.getEmpresa_id());
-            } 
+                maquinaService.executarCadastro(idEmpresa);
+            }
 
             // Identificar máquina e começar a monitorar o processo
-            Integer idAtm = login.identificarMaquina();
-            killProcessos.monitorar(idAtm);
+            Integer idAtm = maquinaService.identificarMaquina();
+            killProcessos.monitorar(idAtm,idEmpresa);
         }
     }
 

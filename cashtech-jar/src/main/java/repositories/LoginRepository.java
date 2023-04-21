@@ -10,7 +10,6 @@ import java.util.Map;
 import models.Usuario;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SingleColumnRowMapper;
 
 /**
  *
@@ -31,9 +30,4 @@ public class LoginRepository {
     public List<Map<String, Object>> verificarMaquina(String hostName) {
         return con.queryForList("select * from caixaeletronico where identificador = ?", hostName);
     }
-
-    public List<Integer> buscarIdMaquina(String nomeMaquina) {
-        return con.query("select id from caixaeletronico", new SingleColumnRowMapper(Integer.class));
-    }
-
 }
