@@ -32,8 +32,8 @@ public class MaquinaRepository {
     }
 
     public void cadastrarEndereco() {
-        con.update("INSERT INTO `cashtech`.`Endereco` (`id`, `rua`, `bairro`, `numero`, `cep`, `complemento`) "
-                + "VALUES (NULL, NULL, NULL, NULL, NULL, NULL)");
+        con.update("INSERT INTO `cashtech`.`Endereco` (`id`, `rua`, `bairro`, `numero`, `cep`) "
+                + "VALUES (NULL, NULL, NULL, NULL, NULL)");
     }
 
     public Integer cadastrarMaquina(RedeParametros parametros) {

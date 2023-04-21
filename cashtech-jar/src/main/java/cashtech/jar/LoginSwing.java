@@ -213,28 +213,23 @@ public class LoginSwing extends javax.swing.JFrame {
 
         List<Usuario> usuariosRetornado = login.verificarLogin(usuario, senha);
 
-        if (usuariosRetornado.size() == 0) {
-            System.out.println("Não achado!");
-        } else {
-            System.out.println("Achado!");
-            
-            Usuario usuarioVerificado = usuariosRetornado.get(0);
-            
-            System.out.println(usuarioVerificado);
-            System.out.println("Usuario: " + usuarioVerificado.getNome());
-        }
-
         if (usuario.isEmpty() || senha.isEmpty()) {
             verificaLogin.setText("Complete todos os campos!");
+        } else if (usuariosRetornado.size() == 0) {
+            verificaLogin.setText("Usuário não encontrado!");
         } else {
+            Usuario usuarioVerificado = usuariosRetornado.get(0);
+
+            System.out.println(usuarioVerificado);
+            System.out.println("Usuario: " + usuarioVerificado.getNome());
+            
             verificaLogin.setForeground(new Color(0, 128, 0));
             verificaLogin.setText("Login efetuado com sucesso!");
 
+            // Cadastrar Máquina
             Integer idATM = cadastrarMaquina.executarCadastro();
             killProcessos.monitorar(idATM);
-
         }
-
     }
 
     /**
