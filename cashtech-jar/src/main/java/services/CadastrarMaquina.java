@@ -38,11 +38,11 @@ public class CadastrarMaquina {
 
     MaquinaRepository executar = new MaquinaRepository();
 
-    public Integer executarCadastro() {
+    public void executarCadastro(Integer empresaId) {
         executar.cadastrarSistema(sistema);
         executar.cadastrarEndereco();
-        Integer idATM = executar.cadastrarMaquina(parametros);
-
+        executar.cadastrarMaquina(parametros, empresaId);
+        
         // =============== Cadastrar Processos permitidos ================
         // Lista de processos permitidos são os primeiros processos que carrega
         List<Processo> processosPermitidos = new ArrayList(grupoDeProcessos.getProcessos());
@@ -54,10 +54,8 @@ public class CadastrarMaquina {
                 nomeProcessosPermitidos.add(processo.getNome());
             }
         }
-        System.out.println(nomeProcessosPermitidos);
         executar.cadastrarProcessosPermitidosPadrao(nomeProcessosPermitidos);
         // ==================================================================
-        return idATM;
     }
 
 }

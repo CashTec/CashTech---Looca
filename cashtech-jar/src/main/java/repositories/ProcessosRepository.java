@@ -10,7 +10,9 @@ import com.github.britooo.looca.api.group.processos.Processo;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 
 /**
  *
@@ -25,10 +27,11 @@ public class ProcessosRepository {
     Looca looca = new Looca();
     Processo processo;
 
-    public List<Map<String, Object>> processosPermitidos() {
+    public List<String> processosPermitidos() {
 
-        List<Map<String, Object>> processosPermitidos
-                = con.queryForList("select nome from ProcessoPermitido");
+        List<String> processosPermitidos
+                = con.query("select nome from ProcessoPermitido",
+                        new SingleColumnRowMapper(String.class));
 
         return processosPermitidos;
     }
@@ -38,7 +41,7 @@ public class ProcessosRepository {
                 + "`pid`,`uso_cpu`, `uso_memoria`, `byte_utilizado`, `memoria_virtual_ultilizada`,"
                 + " `id_dead`, `dt_processo`) "
                 + "VALUES (NULL,?,?, ?, ?, ?, ?, ?, 1, ?)",
-                idAtm,processo.getNome() ,processo.getPid(), processo.getUsoCpu(), processo.getUsoMemoria(),
+                idAtm, processo.getNome(), processo.getPid(), processo.getUsoCpu(), processo.getUsoMemoria(),
                 processo.getBytesUtilizados(), processo.getMemoriaVirtualUtilizada(),
                 dataHora);
     }

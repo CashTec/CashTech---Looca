@@ -219,16 +219,19 @@ public class LoginSwing extends javax.swing.JFrame {
             verificaLogin.setText("Usuário não encontrado!");
         } else {
             Usuario usuarioVerificado = usuariosRetornado.get(0);
-
-            System.out.println(usuarioVerificado);
             System.out.println("Usuario: " + usuarioVerificado.getNome());
-            
+
             verificaLogin.setForeground(new Color(0, 128, 0));
             verificaLogin.setText("Login efetuado com sucesso!");
 
-            // Cadastrar Máquina
-            Integer idATM = cadastrarMaquina.executarCadastro();
-            killProcessos.monitorar(idATM);
+            if (!login.hasMaquina()) {
+                // Cadastrar Máquina
+                cadastrarMaquina.executarCadastro(usuarioVerificado.getEmpresa_id());
+            } 
+
+            // Identificar máquina e começar a monitorar o processo
+            Integer idAtm = login.identificarMaquina();
+            killProcessos.monitorar(idAtm);
         }
     }
 

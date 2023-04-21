@@ -36,15 +36,14 @@ public class MaquinaRepository {
                 + "VALUES (NULL, NULL, NULL, NULL, NULL)");
     }
 
-    public Integer cadastrarMaquina(RedeParametros parametros) {
+    public void cadastrarMaquina(RedeParametros parametros, Integer empresa_id) {
 
         con.update("INSERT INTO `cashtech`.`CaixaEletronico` "
                 + "(`id`, `identificador`, `situacao`, `empresa_id`, `endereco_id`, `sistema_id`) "
-                + "VALUES (NULL,?,'ativo', 1, (select id from endereco order by id desc limit 1),"
+                + "VALUES (NULL,?,'ativo', ?, (select id from endereco order by id desc limit 1),"
                 + "(select id from sistema order by id desc limit 1));",
-                parametros.getHostName());
+                parametros.getHostName(),empresa_id);
 
-        return 1;
     }
 
     public void cadastrarProcessosPermitidosPadrao(List<String> processos) {
