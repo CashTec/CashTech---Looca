@@ -23,26 +23,46 @@ public class MaquinaRepository {
     public JdbcTemplate con = conexao.getConnection();
 
     public void cadastrarSistema(Sistema sistema) {
+        String script;
         if (conexao.getAmbiente().equals("producao")) {
             // Query do SQL
+            script = "INSERT INTO Sistema (nome,fabricante,arquitetura) VALUES"
+                    + "(?,?,?)";
         } else {
-            con.update("INSERT INTO `cashtech`.`Sistema` (`id`, `nome`, `fabricante`, `arquitetura`)"
-                    + " VALUES (null,?, ?, ?);",
-                    sistema.getSistemaOperacional(), sistema.getFabricante(), sistema.getArquitetura());
+            script = "INSERT INTO `cashtech`.`Sistema` (`id`, `nome`, `fabricante`, `arquitetura`)"
+                    + " VALUES (null,?, ?, ?)";
         }
+        con.update(script,
+                sistema.getSistemaOperacional(), sistema.getFabricante(), sistema.getArquitetura());
     }
 
     public void cadastrarEndereco() {
-        con.update("INSERT INTO `cashtech`.`Endereco` (`id`, `rua`, `bairro`, `numero`, `cep`) "
-                + "VALUES (NULL, NULL, NULL, NULL, NULL)");
+        String script;
+        if (conexao.getAmbiente().equals("producao")) {
+            // Query do SQL
+            script = "INSERT INTO Endereco (rua, bairro, numero, cep) "
+                    + "VALUES (NULL, NULL, NULL, NULL)";
+        } else {
+            script = "INSERT INTO `cashtech`.`Endereco` (`id`, `rua`, `bairro`, `numero`, `cep`) "
+                    + "VALUES (NULL, NULL, NULL, NULL, NULL)";
+        }
+        con.update(script);
     }
 
     public void cadastrarMaquina(RedeParametros parametros, Integer empresa_id) {
-
-        con.update("INSERT INTO `cashtech`.`CaixaEletronico` "
-                + "(`id`, `identificador`, `situacao`, `empresa_id`, `endereco_id`, `sistema_id`) "
-                + "VALUES (NULL,?,'ativo', ?, (select id from endereco order by id desc limit 1),"
-                + "(select id from sistema order by id desc limit 1));",
+        String script;
+        if (conexao.getAmbiente().equals("producao")) {
+            // Query do SQL
+            script = "INSERT INTO CaixaEletronico (identificador, situacao, empresa_id, endereco_id, sistema_id)"
+                    + "VALUES (?, 'ativo', ?, (SELECT TOP 1 id FROM endereco ORDER BY id DESC),"
+                    + "(SELECT TOP 1 id FROM sistema ORDER BY id DESC))";
+        } else {
+            script = "INSERT INTO `cashtech`.`CaixaEletronico` "
+                    + "(`id`, `identificador`, `situacao`, `empresa_id`, `endereco_id`, `sistema_id`) "
+                    + "VALUES (NULL,?,'ativo', ?, (select id from endereco order by id desc limit 1),"
+                    + "(select id from sistema order by id desc limit 1));";
+        }
+        con.update(script,
                 parametros.getHostName(), empresa_id);
 
     }

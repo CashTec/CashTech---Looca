@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class DataBase {
 
     // Desenvolvimento ou producao
-    private String ambiente = "desenvolvimento";
+    private String ambiente = "producao";
 
     // Porta padrão 3306
     private String porta = "3307";
@@ -23,13 +23,13 @@ public class DataBase {
     private String servidorNuvem = "svr-cashtech.database.windows.net";
 
     // Banco da Azure = bd-cashtech
-    private String bancoDeDados = "cashtech";
+    private String bancoDeDados = "bd-cashtech";
 
     // Login da Azure = admin-cashtech
-    private String login = "root";
+    private String login = "admin-cashtech";
 
     // Senha da Azure = #Gfgrupo10
-    private String senha = "root";
+    private String senha = "#Gfgrupo10";
 
     private JdbcTemplate connection;
 

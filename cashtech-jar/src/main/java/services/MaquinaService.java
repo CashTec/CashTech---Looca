@@ -43,7 +43,6 @@ public class MaquinaService {
     public void executarCadastro(Integer empresaId) {
         executar.cadastrarSistema(sistema);
         executar.cadastrarEndereco();
-        
         executar.cadastrarMaquina(parametros, empresaId);
         
         // =============== Cadastrar Processos permitidos ================
