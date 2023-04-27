@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.util.List;
 import models.Usuario;
 import services.MaquinaService;
-import services.KillProcessos;
-import services.Login;
+import services.KillProcessosService;
+import services.LoginService;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,9 +24,9 @@ public class LoginSwing extends javax.swing.JFrame {
         initComponents();
     }
 
-    KillProcessos killProcessos = new KillProcessos();
+    KillProcessosService killProcessos = new KillProcessosService();
     MaquinaService maquinaService = new MaquinaService();
-    Login login = new Login();
+    LoginService login = new LoginService();
 
     /**
      * This method is called from within the constructor to initialize the form.
