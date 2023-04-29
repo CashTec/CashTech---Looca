@@ -21,13 +21,13 @@ public class LoginRepository {
     public JdbcTemplate con = conexao.getConnection();
 
     public List<Usuario> verificarExisteUsuario(String usuario, String senha) {
-        List<Usuario> lista = con.query("select * from usuario where login = ? and senha = ?",
+        List<Usuario> lista = con.query("select * from Usuario where login = ? and senha = ?",
                 new BeanPropertyRowMapper(Usuario.class), usuario, senha);
 
         return lista;
     }
 
     public List<Map<String, Object>> verificarMaquina(String hostName) {
-        return con.queryForList("select * from caixaeletronico where identificador = ?", hostName);
+        return con.queryForList("select * from CaixaEletronico where identificador = ?", hostName);
     }
 }

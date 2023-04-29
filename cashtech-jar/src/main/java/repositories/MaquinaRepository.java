@@ -55,12 +55,12 @@ public class MaquinaRepository {
             // Query do SQL
             script = "INSERT INTO CaixaEletronico (identificador, situacao, empresa_id, endereco_id, sistema_id)"
                     + "VALUES (?, 'ativo', ?, (SELECT TOP 1 id FROM endereco ORDER BY id DESC),"
-                    + "(SELECT TOP 1 id FROM sistema ORDER BY id DESC))";
+                    + "(SELECT TOP 1 id FROM Sistema ORDER BY id DESC))";
         } else {
             script = "INSERT INTO `cashtech`.`CaixaEletronico` "
                     + "(`id`, `identificador`, `situacao`, `empresa_id`, `endereco_id`, `sistema_id`) "
-                    + "VALUES (NULL,?,'ativo', ?, (select id from endereco order by id desc limit 1),"
-                    + "(select id from sistema order by id desc limit 1));";
+                    + "VALUES (NULL,?,'ativo', ?, (select id from Endereco order by id desc limit 1),"
+                    + "(select id from Sistema order by id desc limit 1));";
         }
         con.update(script,
                 parametros.getHostName(), empresa_id);
@@ -68,6 +68,6 @@ public class MaquinaRepository {
     }
 
     public List<Integer> buscarIdMaquina(String nomeMaquina) {
-        return con.query("select id from caixaeletronico", new SingleColumnRowMapper(Integer.class));
+        return con.query("select id from CaixaEletronico", new SingleColumnRowMapper(Integer.class));
     }
 }
