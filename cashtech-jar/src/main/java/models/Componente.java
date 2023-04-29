@@ -2,6 +2,7 @@ package models;
 
 public class Componente {
 
+
     private Integer id;
     private String tipo;
 
@@ -15,10 +16,10 @@ public class Componente {
 
     private Integer qtd_cpu_fisica;
 
-    private Integer caixa_eletronico_fk;
+    private Integer caixa_eletronico_id;
 
 
-    public Componente(Integer id, String tipo, String modelo, String serie, Integer qtd_maxima, Double frequencia, Integer qtd_cpu_fisica, Integer caixa_eletronico_fk) {
+    public Componente(Integer id, String tipo, String modelo, String serie, Integer qtd_maxima, Double frequencia, Integer qtd_cpu_fisica, Integer caixa_eletronico_id) {
         this.id = id;
         this.tipo = tipo;
         this.modelo = modelo;
@@ -26,7 +27,7 @@ public class Componente {
         this.qtd_maxima = qtd_maxima;
         this.frequencia = frequencia;
         this.qtd_cpu_fisica = qtd_cpu_fisica;
-        this.caixa_eletronico_fk = caixa_eletronico_fk;
+        this.caixa_eletronico_id = caixa_eletronico_id;
     }
 
     public Componente(){
@@ -89,11 +90,11 @@ public class Componente {
         this.qtd_cpu_fisica = qtd_cpu_fisica;
     }
 
-    public Integer getCaixa_eletronico_fk() {
-        return caixa_eletronico_fk;
+    public Integer getCaixa_eletronico_id() {
+        return caixa_eletronico_id;
     }
 
-    public void setCaixa_eletronico_fk(Integer caixa_eletronico_fk) {
-        this.caixa_eletronico_fk = caixa_eletronico_fk;
+    public void setCaixa_eletronico_id(Integer caixa_eletronico_id) {
+        this.caixa_eletronico_id = caixa_eletronico_id;
     }
 }
