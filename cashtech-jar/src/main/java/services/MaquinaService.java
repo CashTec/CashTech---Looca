@@ -39,12 +39,15 @@ public class MaquinaService {
 
     MaquinaRepository executar = new MaquinaRepository();
     ProcessosRepository executarProcesso = new ProcessosRepository();
-    
+
+
     public void executarCadastro(Integer empresaId) {
         executar.cadastrarSistema(sistema);
         executar.cadastrarEndereco();
         executar.cadastrarMaquina(parametros, empresaId);
-        
+        executar.cadastrarComponenteProcessador(processador,memoria,grupoDeDiscos,"processador");
+        executar.cadastrarComponenteProcessador(processador,memoria,grupoDeDiscos,"memoria");
+        executar.cadastrarComponenteProcessador(processador,memoria,grupoDeDiscos,"disco");
         // =============== Cadastrar Processos permitidos ================
         // Lista de processos permitidos são os primeiros processos que carrega
         List<Processo> processosPermitidos = new ArrayList(grupoDeProcessos.getProcessos());
@@ -65,5 +68,8 @@ public class MaquinaService {
         List<Integer> listaID = executar.buscarIdMaquina(rede.getParametros().getHostName());
         return listaID.get(0);
     }
+
+
+
 
 }
