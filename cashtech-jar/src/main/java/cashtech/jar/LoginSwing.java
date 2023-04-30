@@ -6,6 +6,7 @@ import models.Usuario;
 import services.MaquinaService;
 import services.KillProcessosService;
 import services.LoginService;
+import services.MonitorarService;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,9 +25,10 @@ public class LoginSwing extends javax.swing.JFrame {
         initComponents();
     }
 
-    KillProcessosService killProcessos = new KillProcessosService();
+    KillProcessosService killProcessosService = new KillProcessosService();
     MaquinaService maquinaService = new MaquinaService();
-    LoginService login = new LoginService();
+    LoginService loginService = new LoginService();
+    MonitorarService monitorarService = new MonitorarService();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -211,7 +213,7 @@ public class LoginSwing extends javax.swing.JFrame {
         String usuario = txtUsuario.getText();
         String senha = txtSenha.getText();
 
-        List<Usuario> usuariosRetornado = login.verificarLogin(usuario, senha);
+        List<Usuario> usuariosRetornado = loginService.verificarLogin(usuario, senha);
 
         if (usuario.isEmpty() || senha.isEmpty()) {
             verificaLogin.setText("Complete todos os campos!");
@@ -225,14 +227,16 @@ public class LoginSwing extends javax.swing.JFrame {
             verificaLogin.setText("Login efetuado com sucesso!");
 
             Integer idEmpresa = usuarioVerificado.getEmpresa_id();
-            if (!login.hasMaquina()) {
+            if (!loginService.hasMaquina()) {
                 // Cadastrar Máquina
                 maquinaService.executarCadastro(idEmpresa);
             }
 
             // Identificar máquina e começar a monitorar o processo
             Integer idAtm = maquinaService.identificarMaquina();
-            killProcessos.monitorar(idAtm,idEmpresa);
+            killProcessosService.monitorar(idAtm,idEmpresa);
+//            monitorarService.monitorarHardware(idAtm);
+
         }
     }
 
