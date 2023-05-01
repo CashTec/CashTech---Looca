@@ -7,6 +7,7 @@ package repositories;
 import cashtech.jar.DataBase;
 import com.github.britooo.looca.api.group.discos.Disco;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.discos.Volume;
 import com.github.britooo.looca.api.group.memoria.Memoria;
 import com.github.britooo.looca.api.group.processador.Processador;
 import com.github.britooo.looca.api.group.rede.RedeParametros;
@@ -15,15 +16,16 @@ import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.britooo.looca.api.util.Conversor;
 import models.Componente;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 
 /**
- *
  * @author murilo
  */
 public class MaquinaRepository {
+
 
     DataBase conexao = new DataBase();
     RedeParametros redeParametros;
@@ -80,35 +82,68 @@ public class MaquinaRepository {
     }
 
 
-    public void cadastrarComponenteProcessador(Processador processador, Memoria memoria, DiscoGrupo discoGrupo,String tipo){
-
-        String script = "INSERT INTO Componente" +
-                "(tipo,modelo,serie,frequencia,qtd_cpu_logica," +
-                "qtd_cpu_fisica,qtd_maxima,caixa_eletronico_id)" +
-                "VALUES(?,?,?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
-
-        if(tipo.equals("processador")){
-
-            con.update(script,tipo,processador.getNome(), processador.getId(),
-                                    processador.getFrequencia(),processador.getNumeroCpusLogicas(),
-                                    processador.getNumeroCpusFisicas(),null);
-        }
-        else if(tipo.equals("memoria")){
-
-            con.update(script,tipo,null, null,
-                    null,null,
-                    null,memoria.getTotal());
+    public void cadastrarComponente(Processador processador, Memoria memoria, DiscoGrupo discoGrupo, String tipo) {
+        String script;
+        if (conexao.getAmbiente().equals("producao")) {
+            script = "INSERT INTO Componente" +
+                    "(tipo,nome,modelo,serie,frequencia,qtd_cpu_logica," +
+                    "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)" +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC))";
+        } else {
+            script = "INSERT INTO Componente" +
+                    "(tipo,nome,modelo,serie,frequencia,qtd_cpu_logica," +
+                    "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)" +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
         }
 
-        else if(tipo.equals("disco")){
-            List<Disco> discos = discoGrupo.getDiscos();
-            for(int i = 0; i< discos.size();i++){
-                con.update(script,tipo,discos.get(i).getNome(), discos.get(i).getModelo(),
-                       discos.get(i).getTempoDeTransferencia(), null
-                        ,null,discos.get(i).getTamanho());
+        if (tipo.equals("processador")) {
+            System.out.println(processador.getNumeroCpusFisicas());
+            con.update(script,
+                    tipo,// tipo
+                    processador.getNome(), //nome
+                    null,// modelo
+                    processador.getId(),//serie
+                    processador.getFrequencia(),//frequencia
+                    processador.getNumeroCpusLogicas(),// qtd_cpu_logica
+                    processador.getNumeroCpusFisicas(),// qtd_cpu_fisica
+                    null,// qtd_maxima
+                    null,//qtd_disponivel
+                    null,//ponto_montagem
+                    null);// sistemas_arquivos
+        } else if (tipo.equals("memoria")) {
+
+            con.update(script,
+                    tipo,// tipo
+                    null,// nome
+                    null,// modelo
+                    null,// serie
+                    null,// frequencia
+                    null,// q
+                    null,
+                    memoria.getTotal(),
+                    null,
+                    null,
+                    null
+            );
+        } else if (tipo.equals("disco")) {
+
+            List<Volume> volumes = discoGrupo.getVolumes();
+            for (int i = 0; i < volumes.size(); i++) {
+                con.update(script,
+                        tipo, // tipo
+                        volumes.get(i).getNome(), //nome
+                        null,//modelo
+                        null, // serie
+                        null, // frequencia
+                        null,//qtd_cpu_logica
+                        null,// qtd_cpu_fisica
+                        volumes.get(i).getTotal(),//qtd_maxima
+                        volumes.get(i).getDisponivel(),// qtd_disponivel
+                        volumes.get(i).getPontoDeMontagem(), // ponto_montagem
+                        volumes.get(i).getTipo() // sistema_arquivos
+                );
             }
-        }
-        else{
+        } else {
             System.out.println("Componente Inválido");
         }
     }
