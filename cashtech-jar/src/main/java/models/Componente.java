@@ -16,10 +16,17 @@ public class Componente {
 
     private Integer qtd_cpu_fisica;
 
+    private Integer qtd_disponivel;
+
+    private String ponto_montegem;
+
+    private String sistema_arquivos;
+
+
     private Integer caixa_eletronico_id;
 
 
-    public Componente(Integer id, String tipo, String modelo, String serie, Integer qtd_maxima, Double frequencia, Integer qtd_cpu_fisica, Integer caixa_eletronico_id) {
+    public Componente(Integer id, String tipo, String modelo, String serie, Integer qtd_maxima, Double frequencia, Integer qtd_cpu_fisica, Integer qtd_disponivel, String ponto_montegem, String sistema_arquivos, Integer caixa_eletronico_id) {
         this.id = id;
         this.tipo = tipo;
         this.modelo = modelo;
@@ -27,8 +34,13 @@ public class Componente {
         this.qtd_maxima = qtd_maxima;
         this.frequencia = frequencia;
         this.qtd_cpu_fisica = qtd_cpu_fisica;
+        this.qtd_disponivel = qtd_disponivel;
+        this.ponto_montegem = ponto_montegem;
+        this.sistema_arquivos = sistema_arquivos;
         this.caixa_eletronico_id = caixa_eletronico_id;
     }
+
+
 
     public Componente(){
 
@@ -88,6 +100,30 @@ public class Componente {
 
     public void setQtd_cpu_fisica(Integer qtd_cpu_fisica) {
         this.qtd_cpu_fisica = qtd_cpu_fisica;
+    }
+
+    public Integer getQtd_disponivel() {
+        return qtd_disponivel;
+    }
+
+    public void setQtd_disponivel(Integer qtd_disponivel) {
+        this.qtd_disponivel = qtd_disponivel;
+    }
+
+    public String getPonto_montegem() {
+        return ponto_montegem;
+    }
+
+    public void setPonto_montegem(String ponto_montegem) {
+        this.ponto_montegem = ponto_montegem;
+    }
+
+    public String getSistema_arquivos() {
+        return sistema_arquivos;
+    }
+
+    public void setSistema_arquivos(String sistema_arquivos) {
+        this.sistema_arquivos = sistema_arquivos;
     }
 
     public Integer getCaixa_eletronico_id() {
