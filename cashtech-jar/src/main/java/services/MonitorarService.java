@@ -7,6 +7,7 @@ package services;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.Disco;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.discos.Volume;
 import com.github.britooo.looca.api.group.memoria.Memoria;
 import com.github.britooo.looca.api.group.processador.Processador;
 import com.github.britooo.looca.api.group.rede.Rede;
@@ -17,6 +18,8 @@ import java.time.LocalDateTime;
 import repositories.MonitorarRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,45 +29,57 @@ import java.util.TimerTask;
  */
 public class MonitorarService {
 
-    Looca looca = new Looca();
-    Sistema sistema = looca.getSistema();
-    Memoria memoria = looca.getMemoria();
-    Processador processador = looca.getProcessador();
-    DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
-    List<Disco> disco = grupoDeDiscos.getDiscos();
-    Rede rede = looca.getRede();
-    RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
-    List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
-
     MonitorarRepository monitorarRepository = new MonitorarRepository();
 
     public void monitorarHardware(Integer idAtm) {
+
         Integer idMemoria = monitorarRepository.verIdComponente(idAtm, "memoria").get(0);
         Integer idProcessador = monitorarRepository.verIdComponente(idAtm, "processador").get(0);
         Integer idRede = monitorarRepository.verIdRede(idAtm).get(0);
-        List<Integer> idsDisco = monitorarRepository.verIdComponente(idAtm, "disco");
-
+        List<Map<String, Object>> idsVolume = monitorarRepository.verIdComponenteVolume(idAtm);
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                LocalDateTime agora = LocalDateTime.now();
+                Looca looca = new Looca();
+                Sistema sistema = looca.getSistema();
+                Memoria memoria = looca.getMemoria();
+                Processador processador = looca.getProcessador();
+                DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
+                List<Volume> volumes = grupoDeDiscos.getVolumes();
+                List<Disco> disco = grupoDeDiscos.getDiscos();
+                Rede rede = looca.getRede();
+                RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
+                List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
 
-                monitorarRepository.enviarSistema(idAtm, sistema, agora);
+                LocalDateTime dtMetrica = LocalDateTime.now();
 
-                monitorarRepository.enviarMetrica(idMemoria, agora, Double.parseDouble((memoria.getEmUso()).toString()));
-                monitorarRepository.enviarMetrica(idProcessador, agora, processador.getUso());
-                
-                for (Integer idDisco : idsDisco) {
-                    monitorarRepository.enviarMetrica(idDisco, agora, Double.parseDouble((disco.get(0).getEscritas()).toString()));
+                monitorarRepository.enviarSistema(idAtm, sistema, dtMetrica);
+
+                monitorarRepository.enviarMetrica(idMemoria, dtMetrica, memoria.getEmUso());
+                monitorarRepository.enviarMetrica(idProcessador, dtMetrica, processador.getUso());
+
+                for (Map<String, Object> volume : idsVolume) {
+                    Integer idVolume = (Integer) volume.get("id");
+                    String particao = (String) volume.get("nome");
+                    Optional<Volume> volumeOptional = volumes.stream().filter(v -> v.getPontoDeMontagem().equals(particao)).findFirst();
+                    Volume volumeMonitorado = volumeOptional.get();
+                    monitorarRepository.enviarMetrica(idVolume, dtMetrica, volumeMonitorado.getDisponivel());
                 }
-                
-//                monitorarRepository.enviarMetrica(idRede, agora, Double.parseDouble((redeInterfaces.get(0).getPacotesRecebidos()).toString()));
 
+                Optional<RedeInterface> optRedeInterface = redeInterfaces.stream().filter(
+                        r -> r.getBytesEnviados() > 0 || r.getBytesRecebidos() > 0).findFirst();
+
+                RedeInterface redeInterface = optRedeInterface.get();
+
+                monitorarRepository.enviarMetricaRede(idRede, redeInterface.getBytesRecebidos(), redeInterface.getBytesEnviados(), dtMetrica);;
             }
 
         }, 0, 2000);
+    }
 
+    public void verificarMetricas(Memoria memoria, Processador processador, Disco disco, RedeInterface redeInterface) {
+        // lógica para parametrização, enviar notifcação e mensagem do slack
     }
 
 }

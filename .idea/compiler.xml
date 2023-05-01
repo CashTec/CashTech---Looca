@@ -9,8 +9,5 @@
         <module name="cashtech-jar" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="cashtech-jar" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
