@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author murilo
  */
-public class Login {
+public class LoginService {
 
     Looca looca = new Looca();
     Rede rede = looca.getRede();

@@ -20,7 +20,7 @@ import repositories.ProcessosRepository;
  *
  * @author murilo
  */
-public class KillProcessos {
+public class KillProcessosService {
 
     Looca looca = new Looca();
     Sistema sistema = looca.getSistema();
