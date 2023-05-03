@@ -5,22 +5,14 @@
 package repositories;
 
 import cashtech.jar.DataBase;
-import com.github.britooo.looca.api.group.discos.Disco;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.discos.Volume;
 import com.github.britooo.looca.api.group.memoria.Memoria;
 import com.github.britooo.looca.api.group.processador.Processador;
-import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.rede.RedeInterface;
-import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
 import com.github.britooo.looca.api.group.rede.RedeParametros;
 import com.github.britooo.looca.api.group.sistema.Sistema;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import com.github.britooo.looca.api.util.Conversor;
-import models.Componente;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 
@@ -66,7 +58,7 @@ public class MaquinaRepository {
     public void cadastrarInterfaceRede(RedeInterface redeDado) {
         String script;
         if (conexao.getAmbiente().equals("producao")) {
-            script = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) VALUES(?,?,?,?,?,(SELECT TOP 1 id  FROM CaixaEletronico ORDER BY id ))";
+            script = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) VALUES(?,?,?,?,?,(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC))";
 
         } else {
             script = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) VALUES(?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
@@ -120,7 +112,6 @@ public class MaquinaRepository {
         }
 
         if (tipo.equals("processador")) {
-            System.out.println(processador.getNumeroCpusFisicas());
             con.update(script,
                     tipo,// tipo
                     processador.getNome(), //nome
