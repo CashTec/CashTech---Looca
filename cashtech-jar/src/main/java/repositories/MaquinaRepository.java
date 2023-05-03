@@ -63,18 +63,23 @@ public class MaquinaRepository {
     }
 
 
-    public void cadastrarInterfaceRede(RedeInterface redeDado){
+    public void cadastrarInterfaceRede(RedeInterface redeDado) {
+        String script;
+        if (conexao.getAmbiente().equals("producao")) {
+            script = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) VALUES(?,?,?,?,?,(SELECT TOP 1 id  FROM CaixaEletronico ORDER BY id ))";
 
-            String script = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) VALUES(?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
-            con.update(
-                    script,
-                    redeDado.getNome(),
-                    redeDado.getNomeExibicao(),
-                    redeDado.getEnderecoIpv4().get(0),
-                    redeDado.getEnderecoIpv6().get(0),
-                    redeDado.getEnderecoMac()
-            );
+        } else {
+            script = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) VALUES(?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
         }
+        con.update(
+                script,
+                redeDado.getNome(),
+                redeDado.getNomeExibicao(),
+                redeDado.getEnderecoIpv4().get(0),
+                redeDado.getEnderecoIpv6().get(0),
+                redeDado.getEnderecoMac()
+        );
+    }
 
     public void cadastrarMaquina(RedeParametros parametros, Integer empresa_id) {
         String script;
