@@ -100,7 +100,8 @@ public class MaquinaRepository {
     }
 
     public List<Integer> buscarIdMaquina(String nomeMaquina) {
-        return con.query("select id from CaixaEletronico", new SingleColumnRowMapper(Integer.class));
+        return con.query("select id from CaixaEletronico where identificador = ?", 
+                new SingleColumnRowMapper(Integer.class),nomeMaquina);
     }
 
 

@@ -48,7 +48,6 @@ public class MonitorarService {
                 Processador processador = looca.getProcessador();
                 DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
                 List<Volume> volumes = grupoDeDiscos.getVolumes();
-                List<Disco> disco = grupoDeDiscos.getDiscos();
                 Rede rede = looca.getRede();
                 RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
                 List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
@@ -59,7 +58,7 @@ public class MonitorarService {
 
                 monitorarRepository.enviarMetrica(idMemoria, dtMetrica, memoria.getEmUso());
                 monitorarRepository.enviarMetrica(idProcessador, dtMetrica, processador.getUso());
-
+              
                 for (Map<String, Object> volume : idsVolume) {
                     Integer idVolume = (Integer) volume.get("id");
                     String pontoMontagem = (String) volume.get("ponto_montagem");
