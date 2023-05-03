@@ -42,8 +42,6 @@ public class MaquinaService {
 
 
 
-
-
     public void executarCadastro(Integer empresaId) {
         executar.cadastrarSistema(sistema);
         executar.cadastrarEndereco();
@@ -51,6 +49,21 @@ public class MaquinaService {
         executar.cadastrarComponente(processador,memoria,grupoDeDiscos,"processador");
         executar.cadastrarComponente(processador,memoria,grupoDeDiscos,"memoria");
         executar.cadastrarComponente(processador,memoria,grupoDeDiscos,"disco");
+
+
+        //CADASTRAR INTERFACE DA REDE
+        List<RedeInterface> redes = rede.getGrupoDeInterfaces().getInterfaces();
+        RedeInterface redeDado=null;
+        for(RedeInterface redeItem : redes){
+            if(redeItem.getBytesEnviados()>0 || redeItem.getBytesRecebidos()>0){
+                redeDado = redeItem;
+            }
+        }
+        if(redeDado!=null) {
+            executar.cadastrarInterfaceRede(redeDado);
+        }
+
+
         // =============== Cadastrar Processos permitidos ================
         // Lista de processos permitidos são os primeiros processos que carrega
         List<Processo> processosPermitidos = new ArrayList(grupoDeProcessos.getProcessos());

@@ -10,6 +10,9 @@ import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.discos.Volume;
 import com.github.britooo.looca.api.group.memoria.Memoria;
 import com.github.britooo.looca.api.group.processador.Processador;
+import com.github.britooo.looca.api.group.rede.Rede;
+import com.github.britooo.looca.api.group.rede.RedeInterface;
+import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
 import com.github.britooo.looca.api.group.rede.RedeParametros;
 import com.github.britooo.looca.api.group.sistema.Sistema;
 
@@ -58,6 +61,20 @@ public class MaquinaRepository {
         }
         con.update(script);
     }
+
+
+    public void cadastrarInterfaceRede(RedeInterface redeDado){
+
+            String script = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) VALUES(?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
+            con.update(
+                    script,
+                    redeDado.getNome(),
+                    redeDado.getNomeExibicao(),
+                    redeDado.getEnderecoIpv4().get(0),
+                    redeDado.getEnderecoIpv6().get(0),
+                    redeDado.getEnderecoMac()
+            );
+        }
 
     public void cadastrarMaquina(RedeParametros parametros, Integer empresa_id) {
         String script;
