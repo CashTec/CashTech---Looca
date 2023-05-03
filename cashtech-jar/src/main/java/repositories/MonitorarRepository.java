@@ -26,16 +26,16 @@ public class MonitorarRepository {
 
     public List<Integer> verIdComponente(Integer idAtm, String tipoComponente) {
         return con.query("select id from componente where caixa_eletronico_id = ? and tipo = ?",
-                new SingleColumnRowMapper(String.class), idAtm, tipoComponente);
+                new SingleColumnRowMapper(Integer.class), idAtm, tipoComponente);
     }
 
     public List<Map<String, Object>> verIdComponenteVolume(Integer idAtm) {
-        return con.queryForList("select id, nome from componente where caixa_eletronico_id = ? and tipo = ", idAtm);
+        return con.queryForList("select id, ponto_montagem from componente where caixa_eletronico_id = ? and tipo = ", idAtm);
     }
 
     public List<Integer> verIdRede(Integer idAtm) {
         return con.query("select id from networkinterface where caixa_eletronico_id = ?",
-                new SingleColumnRowMapper(String.class), idAtm);
+                new SingleColumnRowMapper(Integer.class), idAtm);
     }
 
     public void enviarSistema(Integer idAtm, Sistema sistema, LocalDateTime dtMetrica) {

@@ -41,9 +41,6 @@ public class MaquinaService {
     ProcessosRepository executarProcesso = new ProcessosRepository();
 
 
-
-
-
     public void executarCadastro(Integer empresaId) {
         executar.cadastrarSistema(sistema);
         executar.cadastrarEndereco();

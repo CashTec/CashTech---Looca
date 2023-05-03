@@ -61,8 +61,8 @@ public class MonitorarService {
 
                 for (Map<String, Object> volume : idsVolume) {
                     Integer idVolume = (Integer) volume.get("id");
-                    String particao = (String) volume.get("nome");
-                    Optional<Volume> volumeOptional = volumes.stream().filter(v -> v.getPontoDeMontagem().equals(particao)).findFirst();
+                    String pontoMontagem = (String) volume.get("ponto_montagem");
+                    Optional<Volume> volumeOptional = volumes.stream().filter(v -> v.getPontoDeMontagem().equals(pontoMontagem)).findFirst();
                     Volume volumeMonitorado = volumeOptional.get();
                     monitorarRepository.enviarMetrica(idVolume, dtMetrica, volumeMonitorado.getDisponivel());
                 }

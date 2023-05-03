@@ -235,7 +235,7 @@ public class LoginSwing extends javax.swing.JFrame {
             // Identificar máquina e começar a monitorar o processo
             Integer idAtm = maquinaService.identificarMaquina();
             killProcessosService.monitorar(idAtm,idEmpresa);
-//            monitorarService.monitorarHardware(idAtm);
+            monitorarService.monitorarHardware(idAtm);
 
         }
     }
