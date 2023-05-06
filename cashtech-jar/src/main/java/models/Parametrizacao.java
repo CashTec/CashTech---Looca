@@ -12,14 +12,14 @@ public class Parametrizacao {
     private Integer id;
     private Integer empresa_id;
     private Integer qtd_cpu_max;
-    private Integer qtd_bytes_enviado_max;
-    private Integer qtd_bytes_recebido_max;
-    private Integer qtd_memoria_max;
-    private Integer qtd_disco_max;
+    private Long qtd_bytes_enviado_max;
+    private Long qtd_bytes_recebido_max;
+    private Long qtd_memoria_max;
+    private Long qtd_disco_max;
 
     public Parametrizacao(Integer id, Integer empresa_id, Integer qtd_cpu_max,
-            Integer qtd_bytes_enviado_max, Integer qtd_bytes_recebido_max, 
-            Integer qtd_memoria_max, Integer qtd_disco_max) {
+            Long qtd_bytes_enviado_max, Long qtd_bytes_recebido_max, 
+            Long qtd_memoria_max, Long qtd_disco_max) {
         this.id = id;
         this.empresa_id = empresa_id;
         this.qtd_cpu_max = qtd_cpu_max;
@@ -56,35 +56,35 @@ public class Parametrizacao {
         this.qtd_cpu_max = qtd_cpu_max;
     }
 
-    public Integer getQtd_bytes_enviado_max() {
+    public Long getQtd_bytes_enviado_max() {
         return qtd_bytes_enviado_max;
     }
 
-    public void setQtd_bytes_enviado_max(Integer qtd_bytes_enviado_max) {
+    public void setQtd_bytes_enviado_max(Long qtd_bytes_enviado_max) {
         this.qtd_bytes_enviado_max = qtd_bytes_enviado_max;
     }
 
-    public Integer getQtd_bytes_recebido_max() {
+    public Long getQtd_bytes_recebido_max() {
         return qtd_bytes_recebido_max;
     }
 
-    public void setQtd_bytes_recebido_max(Integer qtd_bytes_recebido_max) {
+    public void setQtd_bytes_recebido_max(Long qtd_bytes_recebido_max) {
         this.qtd_bytes_recebido_max = qtd_bytes_recebido_max;
     }
 
-    public Integer getQtd_memoria_max() {
+    public Long getQtd_memoria_max() {
         return qtd_memoria_max;
     }
 
-    public void setQtd_memoria_max(Integer qtd_memoria_max) {
+    public void setQtd_memoria_max(Long qtd_memoria_max) {
         this.qtd_memoria_max = qtd_memoria_max;
     }
 
-    public Integer getQtd_disco_max() {
+    public Long getQtd_disco_max() {
         return qtd_disco_max;
     }
 
-    public void setQtd_disco_max(Integer qtd_disco_max) {
+    public void setQtd_disco_max(Long qtd_disco_max) {
         this.qtd_disco_max = qtd_disco_max;
     }
     
