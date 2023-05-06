@@ -5,8 +5,9 @@
 package repositories;
 
 import cashtech.jar.DataBase;
-import com.github.britooo.looca.api.core.Looca;
+import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 
 /**
  *
@@ -17,5 +18,9 @@ public class ParametrizarRepository {
 
     JdbcTemplate con = conexao.getConnection();
 
-    Looca looca = new Looca();
+    
+    public List<Integer> verParametrizacao(Integer empresa_id){
+        return con.query("select * from parametrizacao where empresa_id = ?",
+                new SingleColumnRowMapper(Integer.class), empresa_id);
+    }
 }
