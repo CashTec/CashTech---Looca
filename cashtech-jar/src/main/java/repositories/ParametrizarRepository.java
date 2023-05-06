@@ -18,9 +18,14 @@ public class ParametrizarRepository {
 
     JdbcTemplate con = conexao.getConnection();
 
-    
     public List<Integer> verParametrizacao(Integer empresa_id){
-        return con.query("select * from parametrizacao where empresa_id = ?",
+        return con.query(
+                "select qtd_cpu_max, "
+                        + "qtd_bytes_enviado_max, "
+                        + "qtd_bytes_recebido_max, "
+                        + "qtd_memoria_max, "
+                        + "qtd_disco_max "
+                        + "from parametrizacao where empresa_id = ?",
                 new SingleColumnRowMapper(Integer.class), empresa_id);
     }
 }
