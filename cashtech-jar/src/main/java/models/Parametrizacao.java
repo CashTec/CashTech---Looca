@@ -28,9 +28,10 @@ public class Parametrizacao {
         this.qtd_memoria_max = qtd_memoria_max;
         this.qtd_disco_max = qtd_disco_max;
     }
+
+    public Parametrizacao() {
     
-    
-    
+    }
 
     public Integer getId() {
         return id;
