@@ -51,7 +51,7 @@ public class MonitorarService {
         List<Map<String, Object>> idsVolume = monitorarRepository.verIdComponenteVolume(idAtm);
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override           
+            @Override
             public void run() {
                 Looca looca = new Looca();
                 Sistema sistema = looca.getSistema();
@@ -99,46 +99,37 @@ public class MonitorarService {
                     }
                 }
 
-                for (int i = 0; i < topVinteProcessos.size(); i++) {
-                    Processo processo = topVinteProcessos.get(i);
-                    System.out.println(i + ", Processo: " + processo.getNome() + " uso: " + df.format(processo.getUsoCpu())
-                    );
-                }
-                System.out.println("-".repeat(200));
-
                 processosRepository.cadastrarProcessosAgora(idAtm, topVinteProcessos, dtMetrica);
                 monitorarRepository.enviarMetricaRede(idRede,
-                        redeInterface.getBytesRecebidos(), 
+                        redeInterface.getBytesRecebidos(),
                         redeInterface.getBytesEnviados(), dtMetrica);;
 
                 verificarMetricas(memoria, processador, volumeMonitorado,
                         redeInterface, idEmpresaUsuario);
             }
 
-        }, 0, 3000);    
+        }, 0, 3000);
     }
 
-    public void verificarMetricas(Memoria memoria, Processador processador, 
+    public void verificarMetricas(Memoria memoria, Processador processador,
             Volume volume, RedeInterface redeInterface, Integer idEmpresaUsuario) {
-        List<Parametrizacao> parametrizacao = 
-                parametrizarRepository.verParametrizacao(idEmpresaUsuario);
-        
-        Parametrizacao usuario = parametrizacao.get(0);
-        
-        //Verificando métricas de Memória
+        List<Parametrizacao> parametrizacao
+                = parametrizarRepository.verParametrizacao(idEmpresaUsuario);
 
-        if(memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
+        Parametrizacao usuario = parametrizacao.get(0);
+
+        //Verificando métricas de Memória
+        if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
             System.out.println("ALERTA!!! ALERTA!!!"
                     + " Uso de memória atingindo o limite!");
-        } else if(memoria.getDisponivel() >= (usuario.getQtd_memoria_max()* 0.50)) {
+        } else if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.50)) {
             System.out.println("Uso de memória na metade da capacidade total!");
         } else {
             System.out.println("Uso de memória na capacidade ideal!");
         }
-        
+
         //Verificando métricas de CPU
-        
-        if(processador.getUso() >= (usuario.getQtd_cpu_max() * 0.75)) {
+        if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.75)) {
             System.out.println("ALERTA!!! ALERTA!!!"
                     + " Uso de processador atingindo o limite!");
         } else if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.5)) {
@@ -146,10 +137,9 @@ public class MonitorarService {
         } else {
             System.out.println("Uso de processador na capacidade ideal!");
         }
-        
+
         //Verificando métricas de Disco/Volume
-        
-        if(volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.75)) {
+        if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.75)) {
             System.out.println("ALERTA!!! ALERTA!!!"
                     + " Uso de disco/volume atingindo o limite!");
         } else if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.5)) {
@@ -157,30 +147,26 @@ public class MonitorarService {
         } else {
             System.out.println("Uso de disco/volume na capacidade ideal!");
         }
-        
+
         //Verificando métricas de bytes enviados de Rede
-        
-        if(redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.75)) {
+        if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.75)) {
             System.out.println("ALERTA!!! ALERTA!!!"
                     + " Uso de bytes enviados atingindo o limite!");
-        } else if(redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.5)) {
+        } else if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.5)) {
             System.out.println("Uso de bytes enviados na metade da capacidade total!");
         } else {
             System.out.println("Uso de bytes enviados na capacidade ideal!");
         }
-        
+
         //Verificando métricas de bytes recebidos da Rede
-        
-         if(redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.75)) {
+        if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.75)) {
             System.out.println("ALERTA!!! ALERTA!!!"
                     + " Uso de bytes recebidos atingindo o limite!");
-        } else if(redeInterface.getBytesRecebidos()>= (usuario.getQtd_bytes_recebido_max() * 0.5)) {
+        } else if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.5)) {
             System.out.println("Uso de bytes recebidos na metade da capacidade total!");
         } else {
             System.out.println("Uso de bytes recebidos na capacidade ideal!");
         }
-         
-         
-        
+
     }
 }
