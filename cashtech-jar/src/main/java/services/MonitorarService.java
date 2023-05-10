@@ -123,6 +123,25 @@ public class MonitorarService {
             System.out.println("");
         }
         
-        //Verificando métricas de Rede
+        //Verificando métricas de bytes enviados de Rede
+        
+        if(usuario.getQtd_bytes_enviado_max() >= (redeInterface.getBytesEnviados() * 0.75)) {
+            System.out.println("");
+        } else if(usuario.getQtd_bytes_enviado_max() >= (redeInterface.getBytesEnviados() * 0.5)) {
+            System.out.println("");
+        } else {
+            System.out.println("");
+        }
+        
+        //Verificando métricas de bytes recebidos da Rede
+        
+         if(usuario.getQtd_bytes_recebido_max() >= (redeInterface.getBytesRecebidos()* 0.75)) {
+            System.out.println("");
+        } else if(usuario.getQtd_bytes_recebido_max() >= (redeInterface.getBytesRecebidos() * 0.5)) {
+            System.out.println("");
+        } else {
+            System.out.println("");
+        }
+        
     }
 }
