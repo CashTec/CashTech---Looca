@@ -16,3 +16,5 @@ Registro de login:
  N:º01 O usuário pedro fez login nesse horário e data: quarta-feira, 10 de maio de 2023 17:58:34
 Registro de login: 
  N:º01 O usuário pedro fez login nesse horário e data: quarta-feira, 10 de maio de 2023 17:59:28
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quarta-feira, 10 de maio de 2023 19:42:09
