@@ -222,7 +222,8 @@ public class LoginSwing extends javax.swing.JFrame {
         } else {
             Usuario usuarioVerificado = usuariosRetornado.get(0);
             System.out.println("Usuario: " + usuarioVerificado.getNome());
-
+            Integer idEmpresaUsuario = usuarioVerificado.getEmpresa_id();
+            
             verificaLogin.setForeground(new Color(0, 128, 0));
             verificaLogin.setText("Login efetuado com sucesso!");
 
@@ -235,7 +236,7 @@ public class LoginSwing extends javax.swing.JFrame {
             // Identificar máquina e começar a monitorar o processo
             Integer idAtm = maquinaService.identificarMaquina();
             killProcessosService.monitorar(idAtm,idEmpresa);
-            monitorarService.monitorarHardware(idAtm);
+            monitorarService.monitorarHardware(idAtm, idUsuario);
 
         }
     }

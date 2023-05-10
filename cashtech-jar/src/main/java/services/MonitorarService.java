@@ -16,12 +16,14 @@ import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
 import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.time.LocalDateTime;
 import repositories.MonitorarRepository;
+import repositories.ParametrizarRepository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
+import models.Parametrizacao;
 
 /**
  *
@@ -30,8 +32,9 @@ import java.util.TimerTask;
 public class MonitorarService {
 
     MonitorarRepository monitorarRepository = new MonitorarRepository();
+    ParametrizarRepository parametrizarRepository = new ParametrizarRepository();
 
-    public void monitorarHardware(Integer idAtm) {
+    public void monitorarHardware(Integer idAtm, Integer idEmpresaUsuario) {
 
         Integer idMemoria = monitorarRepository.verIdComponente(idAtm, "memoria").get(0);
         Integer idProcessador = monitorarRepository.verIdComponente(idAtm, "processador").get(0);
@@ -58,12 +61,12 @@ public class MonitorarService {
 
                 monitorarRepository.enviarMetrica(idMemoria, dtMetrica, memoria.getEmUso());
                 monitorarRepository.enviarMetrica(idProcessador, dtMetrica, processador.getUso());
-              
+                Volume volumeMonitorado = null;
                 for (Map<String, Object> volume : idsVolume) {
                     Integer idVolume = (Integer) volume.get("id");
                     String pontoMontagem = (String) volume.get("ponto_montagem");
                     Optional<Volume> volumeOptional = volumes.stream().filter(v -> v.getPontoDeMontagem().equals(pontoMontagem)).findFirst();
-                    Volume volumeMonitorado = volumeOptional.get();
+                    volumeMonitorado = volumeOptional.get();
                     monitorarRepository.enviarMetrica(idVolume, dtMetrica, volumeMonitorado.getDisponivel());
                 }
 
@@ -72,14 +75,27 @@ public class MonitorarService {
 
                 RedeInterface redeInterface = optRedeInterface.get();
 
-                monitorarRepository.enviarMetricaRede(idRede, redeInterface.getBytesRecebidos(), redeInterface.getBytesEnviados(), dtMetrica);;
+                monitorarRepository.enviarMetricaRede(idRede,
+                        redeInterface.getBytesRecebidos(), 
+                        redeInterface.getBytesEnviados(), dtMetrica);;
+
+                verificarMetricas(memoria, processador, volumeMonitorado,
+                        redeInterface, idEmpresaUsuario);
             }
 
         }, 0, 3000);
     }
 
-    public void verificarMetricas(Memoria memoria, Processador processador, Disco disco, RedeInterface redeInterface) {
-        // lógica para parametrização, enviar notifcação e mensagem do slack
+    public void verificarMetricas(Memoria memoria, Processador processador, 
+            Volume volume, RedeInterface redeInterface, Integer idEmpresaUsuario) {
+        List<Parametrizacao> parametrizacao = 
+                parametrizarRepository.verParametrizacao(idEmpresaUsuario);
+        
+        Parametrizacao usuario = parametrizacao.get(0);
+        
+        if(usuario.getQtd_memoria_max() > (memoria.getDisponivel() * 0.75)) {
+            System.out.println("");
+        }
     }
 
 }
