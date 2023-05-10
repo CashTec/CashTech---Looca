@@ -95,7 +95,6 @@ public class MonitorarService {
         
         if(usuario.getQtd_memoria_max() > (memoria.getDisponivel() * 0.75)) {
             System.out.println("");
-        }
+        } 
     }
-
 }

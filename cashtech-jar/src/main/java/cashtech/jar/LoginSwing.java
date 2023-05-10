@@ -1,9 +1,21 @@
 package cashtech.jar;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Usuario;
 import services.MaquinaService;
+import services.GerarLog;
 import services.KillProcessosService;
 import services.LoginService;
 import services.MonitorarService;
@@ -29,6 +41,8 @@ public class LoginSwing extends javax.swing.JFrame {
     MaquinaService maquinaService = new MaquinaService();
     LoginService loginService = new LoginService();
     MonitorarService monitorarService = new MonitorarService();
+    
+    GerarLog gerarLog = new GerarLog();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -209,17 +223,23 @@ public class LoginSwing extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Pecisar usar o IoException pra caso dê problema não criação do arquivo
+    //ou erro durante a leitura ou gravação de dados
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String usuario = txtUsuario.getText();
         String senha = txtSenha.getText();
 
         List<Usuario> usuariosRetornado = loginService.verificarLogin(usuario, senha);
 
+        //Importar a classe File para poder criar um arquivo
         if (usuario.isEmpty() || senha.isEmpty()) {
             verificaLogin.setText("Complete todos os campos!");
         } else if (usuariosRetornado.size() == 0) {
             verificaLogin.setText("Usuário não encontrado!");
         } else {
+            
+            gerarLog.login(usuario);
+            
             Usuario usuarioVerificado = usuariosRetornado.get(0);
             System.out.println("Usuario: " + usuarioVerificado.getNome());
             Integer idEmpresaUsuario = usuarioVerificado.getEmpresa_id();
@@ -229,14 +249,16 @@ public class LoginSwing extends javax.swing.JFrame {
 
             Integer idEmpresa = usuarioVerificado.getEmpresa_id();
             if (!loginService.hasMaquina()) {
-                // Cadastrar Máquina
+//                 Cadastrar Máquina
                 maquinaService.executarCadastro(idEmpresa);
             }
 
-            // Identificar máquina e começar a monitorar o processo
+//             Identificar máquina e começar a monitorar o processo
             Integer idAtm = maquinaService.identificarMaquina();
+
             killProcessosService.monitorar(idAtm,idEmpresa);
-            monitorarService.monitorarHardware(idAtm, idUsuario);
+            monitorarService.monitorarHardware(idAtm, idEmpresaUsuario);
+
 
         }
     }
@@ -244,7 +266,7 @@ public class LoginSwing extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
