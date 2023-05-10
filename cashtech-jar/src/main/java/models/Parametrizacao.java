@@ -4,6 +4,8 @@
  */
 package models;
 
+import com.github.britooo.looca.api.group.memoria.Memoria;
+
 /**
  *
  * @author kanaiama
@@ -28,9 +30,10 @@ public class Parametrizacao {
         this.qtd_memoria_max = qtd_memoria_max;
         this.qtd_disco_max = qtd_disco_max;
     }
+
+    public Parametrizacao() {
     
-    
-    
+    }
 
     public Integer getId() {
         return id;
@@ -86,6 +89,10 @@ public class Parametrizacao {
 
     public void setQtd_disco_max(Long qtd_disco_max) {
         this.qtd_disco_max = qtd_disco_max;
+    }
+
+    public double getQtd_memoria_max(Memoria memoria) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     
