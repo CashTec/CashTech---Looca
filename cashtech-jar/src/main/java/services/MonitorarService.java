@@ -93,6 +93,8 @@ public class MonitorarService {
         
         Parametrizacao usuario = parametrizacao.get(0);
         
+        //Verificando métricas de Memória
+        
         if(usuario.getQtd_memoria_max() >= (memoria.getDisponivel() * 0.75)) {
             System.out.println("");
         } else if(usuario.getQtd_memoria_max() >= (memoria.getDisponivel()) * 0.50) {
@@ -100,5 +102,27 @@ public class MonitorarService {
         } else {
             System.out.println("");
         }
+        
+        //Verificando métricas de CPU
+        
+        if(usuario.getQtd_cpu_max() >= (processador.getUso() * 0.75)) {
+            System.out.println("");
+        } else if (usuario.getQtd_cpu_max() >= (processador.getUso() * 0.5)) {
+            System.out.println("");
+        } else {
+            System.out.println("");
+        }
+        
+        //Verificando métricas de Disco/Volume
+        
+        if(usuario.getQtd_disco_max() >= (volume.getDisponivel() * 0.75)) {
+            System.out.println("");
+        } else if (usuario.getQtd_disco_max() >= (volume.getDisponivel() * 0.5)) {
+            System.out.println("");
+        } else {
+            System.out.println("");
+        }
+        
+        //Verificando métricas de Rede
     }
 }
