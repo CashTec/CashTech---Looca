@@ -93,8 +93,12 @@ public class MonitorarService {
         
         Parametrizacao usuario = parametrizacao.get(0);
         
-        if(usuario.getQtd_memoria_max() > (memoria.getDisponivel() * 0.75)) {
+        if(usuario.getQtd_memoria_max() >= (memoria.getDisponivel() * 0.75)) {
             System.out.println("");
-        } 
+        } else if(usuario.getQtd_memoria_max() >= (memoria.getDisponivel()) * 0.50) {
+            System.out.println("");
+        } else {
+            System.out.println("");
+        }
     }
 }
