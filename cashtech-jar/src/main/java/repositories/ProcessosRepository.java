@@ -7,7 +7,9 @@ package repositories;
 import cashtech.jar.DataBase;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.processos.Processo;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -82,5 +84,43 @@ public class ProcessosRepository {
                 idAtm, processo.getNome(), processo.getPid(), processo.getUsoCpu(), processo.getUsoMemoria(),
                 processo.getBytesUtilizados(), processo.getMemoriaVirtualUtilizada(),
                 dataHora);
+    }
+
+    public void cadastrarProcessosAgora(Integer idAtm, List<Processo> processos, LocalDateTime dataHora) {
+        String script;
+        String values = "";
+
+        // criar um DateTimeFormatter com o padrão desejado
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
+        // criar uma string formatada usando o DateTimeFormatter
+        String formattedDateTime = dataHora.format(formatter);
+
+        // analisar a string formatada em um novo LocalDateTime
+        LocalDateTime sqlDate = LocalDateTime.parse(formattedDateTime, formatter);
+
+        for (int i = 0; i < processos.size(); i++) {
+            Processo processo = processos.get(i);
+
+            if (i == processos.size() - 1) {
+                values += String.format("(%s,'%s',%s,%s,%s,%s,%s,0, '%s')", idAtm, processo.getNome(),
+                        processo.getPid(), processo.getUsoCpu(), processo.getUsoMemoria(),
+                        processo.getBytesUtilizados(), processo.getMemoriaVirtualUtilizada(),
+                        sqlDate);
+            } else {
+                values += String.format("(%s,'%s',%s,%s,%s,%s,%s,0,'%s'), ", idAtm, processo.getNome(),
+                        processo.getPid(), processo.getUsoCpu(), processo.getUsoMemoria(),
+                        processo.getBytesUtilizados(), processo.getMemoriaVirtualUtilizada(),
+                        sqlDate);
+            }
+        }
+
+        // Query do SQL
+        script = String.format("INSERT INTO Processo (caixa_eletronico_id, nome, "
+                + "pid,uso_cpu, uso_memoria, byte_utilizado, memoria_virtual_ultilizada,"
+                + " id_dead, dt_processo) "
+                + "VALUES %s", values);
+
+        con.update(script);
     }
 }

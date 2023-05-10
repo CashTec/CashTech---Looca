@@ -20,7 +20,6 @@ public class LoginRepository {
     DataBase conexao = new DataBase();
     public JdbcTemplate con = conexao.getConnection();
 
-    // [{nome: carlor,empresa:1,senha:123},{nome: jose,empresa:1,senha:123}]
     
     public List<Usuario> verificarExisteUsuario(String usuario, String senha) {
         List<Usuario> lista = con.query("select * from Usuario where login = ? and senha = ?",
