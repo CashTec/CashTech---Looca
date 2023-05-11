@@ -264,7 +264,6 @@ public class LoginSwing extends javax.swing.JFrame {
 
             killProcessosService.monitorar(idAtm, idEmpresa);
             monitorarService.monitorarHardware(idAtm, idEmpresaUsuario);
-
         }
     }
 
