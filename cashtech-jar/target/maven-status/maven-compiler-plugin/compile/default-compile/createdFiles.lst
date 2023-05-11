@@ -1,4 +1,5 @@
 repositories\MaquinaRepository.class
+Util\ComparadorUsoProcesso.class
 cashtech\jar\LoginSwing$1.class
 repositories\LoginRepository.class
 services\KillProcessosService$1.class

@@ -43,7 +43,7 @@ public class MonitorarService {
     ParametrizarRepository parametrizarRepository = new ParametrizarRepository();
 
     public void monitorarHardware(Integer idAtm, Integer idEmpresaUsuario) {
-
+        
         Integer idMemoria = monitorarRepository.verIdComponente(idAtm, "memoria").get(0);
         Integer idProcessador = monitorarRepository.verIdComponente(idAtm, "processador").get(0);
         Integer idRede = monitorarRepository.verIdRede(idAtm).get(0);
@@ -64,7 +64,6 @@ public class MonitorarService {
                 List<Processo> processos = processoGrupo.getProcessos();
                 RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
                 List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
-
                 LocalDateTime dtMetrica = LocalDateTime.now();
 
                 monitorarRepository.enviarSistema(idAtm, sistema, dtMetrica, idSistema);
