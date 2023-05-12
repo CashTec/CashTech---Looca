@@ -41,8 +41,12 @@ public class LoginSwing extends javax.swing.JFrame {
     MaquinaService maquinaService = new MaquinaService();
     LoginService loginService = new LoginService();
     MonitorarService monitorarService = new MonitorarService();
-    
+
     GerarLog gerarLog = new GerarLog();
+
+    Color verde = new Color(0, 128, 0);
+    Color vermelho = new Color(128, 0, 0);
+    Color preto = new Color(0, 0, 0);
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -233,18 +237,20 @@ public class LoginSwing extends javax.swing.JFrame {
 
         //Importar a classe File para poder criar um arquivo
         if (usuario.isEmpty() || senha.isEmpty()) {
+            verificaLogin.setForeground(preto);
             verificaLogin.setText("Complete todos os campos!");
         } else if (usuariosRetornado.size() == 0) {
+            verificaLogin.setForeground(vermelho);
             verificaLogin.setText("Usuário não encontrado!");
         } else {
-            
+
             gerarLog.login(usuario);
-            
+
             Usuario usuarioVerificado = usuariosRetornado.get(0);
             System.out.println("Usuario: " + usuarioVerificado.getNome());
             Integer idEmpresaUsuario = usuarioVerificado.getEmpresa_id();
-            
-            verificaLogin.setForeground(new Color(0, 128, 0));
+
+            verificaLogin.setForeground(verde);
             verificaLogin.setText("Login efetuado com sucesso!");
 
             Integer idEmpresa = usuarioVerificado.getEmpresa_id();
@@ -256,9 +262,8 @@ public class LoginSwing extends javax.swing.JFrame {
 //             Identificar máquina e começar a monitorar o processo
             Integer idAtm = maquinaService.identificarMaquina();
 
-            killProcessosService.monitorar(idAtm,idEmpresa);
+            killProcessosService.monitorar(idAtm, idEmpresa);
             monitorarService.monitorarHardware(idAtm, idEmpresaUsuario);
-            
         }
     }
 

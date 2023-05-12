@@ -9,9 +9,12 @@ import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.discos.Volume;
 import com.github.britooo.looca.api.group.memoria.Memoria;
 import com.github.britooo.looca.api.group.processador.Processador;
+import com.github.britooo.looca.api.group.processos.Processo;
 import com.github.britooo.looca.api.group.rede.RedeInterface;
 import com.github.britooo.looca.api.group.rede.RedeParametros;
 import com.github.britooo.looca.api.group.sistema.Sistema;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -20,7 +23,6 @@ import org.springframework.jdbc.core.SingleColumnRowMapper;
  * @author murilo
  */
 public class MaquinaRepository {
-
 
     DataBase conexao = new DataBase();
     RedeParametros redeParametros;
@@ -53,7 +55,6 @@ public class MaquinaRepository {
         }
         con.update(script);
     }
-
 
     public void cadastrarInterfaceRede(RedeInterface redeDado) {
         String script;
@@ -92,73 +93,108 @@ public class MaquinaRepository {
     }
 
     public List<Integer> buscarIdMaquina(String nomeMaquina) {
-        return con.query("select id from CaixaEletronico where identificador = ?", 
-                new SingleColumnRowMapper(Integer.class),nomeMaquina);
+        return con.query("select id from CaixaEletronico where identificador = ?",
+                new SingleColumnRowMapper(Integer.class), nomeMaquina);
     }
-
 
     public void cadastrarComponente(Processador processador, Memoria memoria, DiscoGrupo discoGrupo, String tipo) {
         String script;
+        String scriptSelect;
+
         if (conexao.getAmbiente().equals("producao")) {
-            script = "INSERT INTO Componente" +
-                    "(tipo,nome,modelo,serie,frequencia,qtd_cpu_logica," +
-                    "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)" +
-                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC))";
+            scriptSelect = "(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC)";
+            script = "INSERT INTO Componente"
+                    + "(tipo,nome,modelo,serie,frequencia,qtd_cpu_logica,"
+                    + "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)"
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC))";
         } else {
-            script = "INSERT INTO Componente" +
-                    "(tipo,nome,modelo,serie,frequencia,qtd_cpu_logica," +
-                    "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)" +
-                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
+            scriptSelect = "(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
+            script = "INSERT INTO Componente"
+                    + "(tipo,nome,modelo,serie,frequencia,qtd_cpu_logica,"
+                    + "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)"
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
         }
 
-        if (tipo.equals("processador")) {
-            con.update(script,
-                    tipo,// tipo
-                    processador.getNome(), //nome
-                    null,// modelo
-                    processador.getId(),//serie
-                    processador.getFrequencia(),//frequencia
-                    processador.getNumeroCpusLogicas(),// qtd_cpu_logica
-                    processador.getNumeroCpusFisicas(),// qtd_cpu_fisica
-                    null,// qtd_maxima
-                    null,//qtd_disponivel
-                    null,//ponto_montagem
-                    null);// sistemas_arquivos
-        } else if (tipo.equals("memoria")) {
+        switch (tipo) {
 
-            con.update(script,
-                    tipo,// tipo
-                    null,// nome
-                    null,// modelo
-                    null,// serie
-                    null,// frequencia
-                    null,// q
-                    null,
-                    memoria.getTotal(),
-                    null,
-                    null,
-                    null
-            );
-        } else if (tipo.equals("disco")) {
-
-            List<Volume> volumes = discoGrupo.getVolumes();
-            for (int i = 0; i < volumes.size(); i++) {
+            case "processador":
                 con.update(script,
-                        tipo, // tipo
-                        volumes.get(i).getNome(), //nome
-                        null,//modelo
-                        null, // serie
-                        null, // frequencia
-                        null,//qtd_cpu_logica
-                        null,// qtd_cpu_fisica
-                        volumes.get(i).getTotal(),//qtd_maxima
-                        volumes.get(i).getDisponivel(),// qtd_disponivel
-                        volumes.get(i).getPontoDeMontagem(), // ponto_montagem
-                        volumes.get(i).getTipo() // sistema_arquivos
+                        tipo,// tipo
+                        processador.getNome(), //nome
+                        null,// modelo
+                        processador.getId(),//serie
+                        processador.getFrequencia(),//frequencia
+                        processador.getNumeroCpusLogicas(),// qtd_cpu_logica
+                        processador.getNumeroCpusFisicas(),// qtd_cpu_fisica
+                        null,// qtd_maxima
+                        null,//qtd_disponivel
+                        null,//ponto_montagem
+                        null);// sistemas_arquivos;
+                break;
+
+            case "memoria":
+                con.update(script,
+                        tipo,// tipo
+                        null,// nome
+                        null,// modelo
+                        null,// serie
+                        null,// frequencia
+                        null,// q
+                        null,
+                        memoria.getTotal(),
+                        null,
+                        null,
+                        null
                 );
-            }
-        } else {
-            System.out.println("Componente Inválido");
+                break;
+
+            case "disco":
+                String values = "";
+
+                List<Volume> volumes = discoGrupo.getVolumes();
+                for (int i = 0; i < volumes.size(); i++) {
+                    if (i == volumes.size() - 1) {
+                        values += String.format("('%s','%s',null,null,null,null,null,%d,%d,'%s','%s',%s)",
+                                tipo, // tipo   
+                                volumes.get(i).getNome(), //nome
+                                // modelo
+                                // serie
+                                // frequencia
+                                // qtd_cpu_logica
+                                // qtd_cpu_fisica
+                                volumes.get(i).getTotal(),//qtd_maxima
+                                volumes.get(i).getDisponivel(),// qtd_disponivel
+                                volumes.get(i).getPontoDeMontagem(), // ponto_montagem
+                                volumes.get(i).getTipo(),
+                                scriptSelect); // sistema_arquivos;
+                    } else {
+                        values += String.format("('%s','%s',null,null,null,null,null,%d,%d,'%s','%s',%s), ",
+                                tipo, // tipo
+                                volumes.get(i).getNome(), //nome
+                                // modelo
+                                // serie
+                                // frequencia
+                                // qtd_cpu_logica
+                                // qtd_cpu_fisica
+                                volumes.get(i).getTotal(),//qtd_maxima
+                                volumes.get(i).getDisponivel(),// qtd_disponivel
+                                volumes.get(i).getPontoDeMontagem(), // ponto_montagem
+                                volumes.get(i).getTipo(),
+                                scriptSelect);
+                    }
+                }
+                String scriptDisco = String.format("INSERT INTO Componente"
+                        + " (tipo,nome,modelo,serie,frequencia,qtd_cpu_logica,"
+                        + " qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)"
+                        + " VALUES %s;", values);
+                
+                con.update(scriptDisco);
+                break;
+
+            default:
+                System.out.println("Componente Inválido");
+                System.out.println(tipo);
+                break;
         }
     }
 }

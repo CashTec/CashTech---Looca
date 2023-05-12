@@ -1,16 +1,17 @@
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\cashtech\jar\DataBase.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\repositories\ParametrizarRepository.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\services\MaquinaService.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\models\Usuario.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\services\LoginService.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\cashtech\jar\LoginSwing.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\repositories\LoginRepository.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\repositories\ProcessosRepository.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\models\Parametrizacao.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\repositories\MonitorarRepository.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\repositories\MaquinaRepository.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\services\KillProcessosService.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\services\GerarLog.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\services\MonitorarService.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\models\Componente.java
-C:\Users\PC\Downloads\ADS 2 SEMESTRE\CashTech-APP\cashtech-jar\src\main\java\models\ProcessoPermitido.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\Util\ComparadorUsoProcesso.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\LoginRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\models\Usuario.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\cashtech\jar\LoginSwing.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\models\ProcessoPermitido.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\LoginService.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\models\Parametrizacao.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\MonitorarService.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\ProcessosRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\MaquinaRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\GerarLog.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\MonitorarRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\ParametrizarRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\MaquinaService.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\models\Componente.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\KillProcessosService.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\cashtech\jar\DataBase.java
