@@ -122,11 +122,11 @@ public class MonitorarService {
         //Verificando métricas de Memória
         if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
             frase += ("\nALERTA!!! ALERTA!!!"
-                    + " Uso de memória atingindo o limite! Disponível: " + memoria.getEmUso());
+                    + " Uso de memória atingindo o limite! Disponível: " + memoria.getDisponivel());
         } else if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.50)) {
-            frase += ("\nUso de memória na metade da capacidade total! Disponível: " + memoria.getEmUso());
+            frase += ("\nUso de memória na metade da capacidade total! Disponível: " + memoria.getDisponivel());
         } else {
-            frase += ("\nUso de memória na capacidade ideal! Disponível: " + memoria.getEmUso() );
+            frase += ("\nUso de memória na capacidade ideal! Disponível: " + memoria.getDisponivel() );
         }
 
         //Verificando métricas de CPU
