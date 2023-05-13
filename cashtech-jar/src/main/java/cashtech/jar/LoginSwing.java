@@ -1,18 +1,8 @@
 package cashtech.jar;
 
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import models.Usuario;
 import services.MaquinaService;
 import services.GerarLog;
@@ -41,7 +31,7 @@ public class LoginSwing extends javax.swing.JFrame {
     MaquinaService maquinaService = new MaquinaService();
     LoginService loginService = new LoginService();
     MonitorarService monitorarService = new MonitorarService();
-    
+
     GerarLog gerarLog = new GerarLog();
 
     /**
@@ -223,7 +213,7 @@ public class LoginSwing extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    //Pecisar usar o IoException pra caso dê problema não criação do arquivo
+    //Pecisa usar o IoException pra caso dê problema não criação do arquivo
     //ou erro durante a leitura ou gravação de dados
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String usuario = txtUsuario.getText();
@@ -236,14 +226,15 @@ public class LoginSwing extends javax.swing.JFrame {
             verificaLogin.setText("Complete todos os campos!");
         } else if (usuariosRetornado.size() == 0) {
             verificaLogin.setText("Usuário não encontrado!");
+            gerarLog.login(usuario, true);
         } else {
-            
-            gerarLog.login(usuario);
-            
+
+            gerarLog.login(usuario, false);
+
             Usuario usuarioVerificado = usuariosRetornado.get(0);
             System.out.println("Usuario: " + usuarioVerificado.getNome());
             Integer idEmpresaUsuario = usuarioVerificado.getEmpresa_id();
-            
+
             verificaLogin.setForeground(new Color(0, 128, 0));
             verificaLogin.setText("Login efetuado com sucesso!");
 
@@ -256,9 +247,8 @@ public class LoginSwing extends javax.swing.JFrame {
 //             Identificar máquina e começar a monitorar o processo
             Integer idAtm = maquinaService.identificarMaquina();
 
-            killProcessosService.monitorar(idAtm,idEmpresa);
+            killProcessosService.monitorar(idAtm, idEmpresa);
             monitorarService.monitorarHardware(idAtm, idEmpresaUsuario);
-
 
         }
     }
