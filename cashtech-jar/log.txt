@@ -18,6 +18,23 @@ Registro de login:
  N:º01 O usuário pedro fez login nesse horário e data: quarta-feira, 10 de maio de 2023 17:59:28
 Registro de login: 
  N:º01 O usuário pedro fez login nesse horário e data: quarta-feira, 10 de maio de 2023 19:42:09
-12/05/2023 22:17:06 Tentativa de login do usuário --pedro-- 
-12/05/2023 22:19:32 Tentativa de login do usuário --saad-- 
-12/05/2023 22:20:04 O usuário --pedro-- fez login
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quarta-feira, 10 de maio de 2023 20:03:46
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quarta-feira, 10 de maio de 2023 20:17:31
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quarta-feira, 10 de maio de 2023 20:19:04
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:32:24
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:33:41
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:38:17
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:48:21
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:50:52
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:58:05
+Registro de login: 
+ N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:59:50

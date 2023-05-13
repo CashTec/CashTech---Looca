@@ -43,7 +43,7 @@ public class MonitorarService {
     ParametrizarRepository parametrizarRepository = new ParametrizarRepository();
 
     public void monitorarHardware(Integer idAtm, Integer idEmpresaUsuario) {
-
+        
         Integer idMemoria = monitorarRepository.verIdComponente(idAtm, "memoria").get(0);
         Integer idProcessador = monitorarRepository.verIdComponente(idAtm, "processador").get(0);
         Integer idRede = monitorarRepository.verIdRede(idAtm).get(0);
@@ -64,7 +64,6 @@ public class MonitorarService {
                 List<Processo> processos = processoGrupo.getProcessos();
                 RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
                 List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
-
                 LocalDateTime dtMetrica = LocalDateTime.now();
 
                 monitorarRepository.enviarSistema(idAtm, sistema, dtMetrica, idSistema);
@@ -117,56 +116,60 @@ public class MonitorarService {
                 = parametrizarRepository.verParametrizacao(idEmpresaUsuario);
 
         Parametrizacao usuario = parametrizacao.get(0);
+        
+        String frase = "";
 
         //Verificando métricas de Memória
         if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
-            System.out.println("ALERTA!!! ALERTA!!!"
-                    + " Uso de memória atingindo o limite!");
+            frase += ("\nALERTA!!! ALERTA!!!"
+                    + " Uso de memória atingindo o limite! Disponível: " + memoria.getDisponivel());
         } else if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.50)) {
-            System.out.println("Uso de memória na metade da capacidade total!");
+            frase += ("\nUso de memória na metade da capacidade total! Disponível: " + memoria.getDisponivel());
         } else {
-            System.out.println("Uso de memória na capacidade ideal!");
+            frase += ("\nUso de memória na capacidade ideal! Disponível: " + memoria.getDisponivel() );
         }
 
         //Verificando métricas de CPU
         if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.75)) {
-            System.out.println("ALERTA!!! ALERTA!!!"
-                    + " Uso de processador atingindo o limite!");
+            frase += ("\nALERTA!!! ALERTA!!!"
+                    + " Uso de processador atingindo o limite! Disponível: " + processador.getUso());
         } else if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.5)) {
-            System.out.println("Uso de processador na metade da capacidade total!");
+            frase += ("\nUso de processador na metade da capacidade total! Disponível: " + processador.getUso());
         } else {
-            System.out.println("Uso de processador na capacidade ideal!");
+            frase += ("\nUso de processador na capacidade ideal! Disponível: " + processador.getUso());
         }
 
         //Verificando métricas de Disco/Volume
         if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.75)) {
-            System.out.println("ALERTA!!! ALERTA!!!"
-                    + " Uso de disco/volume atingindo o limite!");
+            frase += ("\nALERTA!!! ALERTA!!!"
+                    + " Uso de disco/volume atingindo o limite! Disponível: " + volume.getDisponivel());
         } else if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.5)) {
-            System.out.println("Uso de disco/volume na metade da capacidade total!");
+            frase += ("\nUso de disco/volume na metade da capacidade total! Disponível: " + volume.getDisponivel());
         } else {
-            System.out.println("Uso de disco/volume na capacidade ideal!");
+            frase += ("\nUso de disco/volume na capacidade ideal! Disponível: " + volume.getDisponivel());
         }
 
         //Verificando métricas de bytes enviados de Rede
         if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.75)) {
-            System.out.println("ALERTA!!! ALERTA!!!"
-                    + " Uso de bytes enviados atingindo o limite!");
+            frase += ("\nALERTA!!! ALERTA!!!"
+                    + " Uso de bytes enviados atingindo o limite! Disponível: " + redeInterface.getBytesEnviados());
         } else if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.5)) {
-            System.out.println("Uso de bytes enviados na metade da capacidade total!");
+            frase += ("\nUso de bytes enviados na metade da capacidade total! Disponível: " + redeInterface.getBytesEnviados());
         } else {
-            System.out.println("Uso de bytes enviados na capacidade ideal!");
+            frase += ("\nUso de bytes enviados na capacidade ideal! Disponível: " + redeInterface.getBytesEnviados());
         }
 
         //Verificando métricas de bytes recebidos da Rede
         if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.75)) {
-            System.out.println("ALERTA!!! ALERTA!!!"
-                    + " Uso de bytes recebidos atingindo o limite!");
+            frase += ("\nALERTA!!! ALERTA!!!"
+                    + " Uso de bytes recebidos atingindo o limite! Disponível: " + redeInterface.getBytesRecebidos());
         } else if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.5)) {
-            System.out.println("Uso de bytes recebidos na metade da capacidade total!");
+            frase += ("\nUso de bytes recebidos na metade da capacidade total! Disponível: " + redeInterface.getBytesRecebidos());
         } else {
-            System.out.println("Uso de bytes recebidos na capacidade ideal!");
+            frase += ("\nUso de bytes recebidos na capacidade ideal! Disponível: " + redeInterface.getBytesRecebidos());
         }
 
+        System.out.println(frase);
+        
     }
 }
