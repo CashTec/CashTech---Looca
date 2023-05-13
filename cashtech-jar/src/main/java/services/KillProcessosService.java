@@ -36,13 +36,13 @@ public class KillProcessosService {
             isLinux = true;
         }
 
-        // Verificar processos permitidos do banco
-        List<String> processosPermitidos = execute.processosPermitidos(idEmpresa);
-
         // ========= Matar processos a cada x segundos ===========
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                // Verificar processos permitidos do banco
+                List<String> processosPermitidos = execute.processosPermitidos(idEmpresa);
+                
                 // Leitura dos processos atuais
                 List<Processo> processosLido = grupoDeProcessos.getProcessos();
 
