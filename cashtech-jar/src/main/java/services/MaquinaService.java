@@ -59,7 +59,6 @@ public class MaquinaService {
 //        }
 //        if (redeDado != null) {
 //        }
-
         Optional<RedeInterface> optRedeInterface = redeInterfaces.stream().filter(
                 r -> r.getBytesEnviados() > 0 || r.getBytesRecebidos() > 0).findFirst();
 
@@ -82,7 +81,9 @@ public class MaquinaService {
                 .filter(processo -> !processosPermitidosBanco.contains(processo))
                 .toList();
 
-        executarProcesso.cadastrarProcessosPermitidosPadrao(processosFiltrados, empresaId);
+        if (!processosFiltrados.isEmpty()) {
+            executarProcesso.cadastrarProcessosPermitidosPadrao(processosFiltrados, empresaId);
+        }
         // ==================================================================
     }
 
