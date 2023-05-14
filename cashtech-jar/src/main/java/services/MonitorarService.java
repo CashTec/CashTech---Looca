@@ -51,6 +51,8 @@ public class MonitorarService {
         List<Map<String, Object>> idsVolume = monitorarRepository.verIdComponenteVolume(idAtm);
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
+            Long bytesRecebidosAntigo = null;
+            Long bytesEnviadosAntigo = null;
             @Override
             public void run() {
                 Looca looca = new Looca();
@@ -85,7 +87,6 @@ public class MonitorarService {
 
                 RedeInterface redeInterface = optRedeInterface.get();
 
-                monitorarRepository.enviarMetricaRede(idRede, redeInterface.getBytesRecebidos(), redeInterface.getBytesEnviados(), dtMetrica);
                 Collections.sort(processos, new ComparadorUsoProcesso());
 
                 List<Processo> topVinteProcessos = new ArrayList<>();
@@ -100,11 +101,14 @@ public class MonitorarService {
 
                 processosRepository.cadastrarProcessosAgora(idAtm, topVinteProcessos, dtMetrica);
                 monitorarRepository.enviarMetricaRede(idRede,
-                        redeInterface.getBytesRecebidos(),
-                        redeInterface.getBytesEnviados(), dtMetrica);;
+                       bytesRecebidosAntigo == null ? 0 : redeInterface.getBytesRecebidos() - bytesRecebidosAntigo,
+                        bytesEnviadosAntigo == null ? 0 : redeInterface.getBytesEnviados() - bytesEnviadosAntigo, dtMetrica);;
 
                 verificarMetricas(memoria, processador, volumeMonitorado,
                         redeInterface, idEmpresaUsuario);
+
+                bytesRecebidosAntigo = redeInterface.getBytesRecebidos();
+                bytesEnviadosAntigo = redeInterface.getBytesEnviados();
             }
 
         }, 0, 3000);
