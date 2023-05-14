@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import com.github.britooo.looca.api.group.sistema.Sistema;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import repositories.ProcessosRepository;
 
@@ -42,7 +45,7 @@ public class KillProcessosService {
             public void run() {
                 // Verificar processos permitidos do banco
                 List<String> processosPermitidos = execute.processosPermitidos(idEmpresa);
-                
+
                 // Leitura dos processos atuais
                 List<Processo> processosLido = grupoDeProcessos.getProcessos();
 
@@ -54,11 +57,14 @@ public class KillProcessosService {
                                 : "TASKKILL /F /IM " + processoLido.getNome() + ".exe";
                         try {
                             Runtime.getRuntime().exec(comando);
-
+                            
+                            ZonedDateTime horarioBrasilia = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+                            LocalDateTime dtMetrica = horarioBrasilia.toLocalDateTime();
+                            
                             System.out.println("\nNome: " + processoLido.getNome());
-                            System.out.println("DataHora: " + LocalDateTime.now());
+                            System.out.println("DataHora: " + dtMetrica);
 
-                            execute.cadastrarProcessoKilled(idAtm, processoLido, LocalDateTime.now());
+                            execute.cadastrarProcessoKilled(idAtm, processoLido, dtMetrica);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

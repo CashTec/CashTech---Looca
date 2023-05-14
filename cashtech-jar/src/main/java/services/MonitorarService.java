@@ -6,7 +6,6 @@ package services;
 
 import Util.ComparadorUsoProcesso;
 import com.github.britooo.looca.api.core.Looca;
-import com.github.britooo.looca.api.group.discos.Disco;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.discos.Volume;
 import com.github.britooo.looca.api.group.memoria.Memoria;
@@ -20,7 +19,8 @@ import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import repositories.MonitorarRepository;
-import java.text.DecimalFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import repositories.ParametrizarRepository;
 
@@ -43,7 +43,7 @@ public class MonitorarService {
     ParametrizarRepository parametrizarRepository = new ParametrizarRepository();
 
     public void monitorarHardware(Integer idAtm, Integer idEmpresaUsuario) {
-        
+
         Integer idMemoria = monitorarRepository.verIdComponente(idAtm, "memoria").get(0);
         Integer idProcessador = monitorarRepository.verIdComponente(idAtm, "processador").get(0);
         Integer idRede = monitorarRepository.verIdRede(idAtm).get(0);
@@ -66,7 +66,9 @@ public class MonitorarService {
                 List<Processo> processos = processoGrupo.getProcessos();
                 RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
                 List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
-                LocalDateTime dtMetrica = LocalDateTime.now();
+                
+                ZonedDateTime horarioBrasilia = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+                LocalDateTime dtMetrica = horarioBrasilia.toLocalDateTime();
 
                 monitorarRepository.enviarSistema(idAtm, sistema, dtMetrica, idSistema);
 
@@ -120,7 +122,7 @@ public class MonitorarService {
                 = parametrizarRepository.verParametrizacao(idEmpresaUsuario);
 
         Parametrizacao usuario = parametrizacao.get(0);
-        
+
         String frase = "";
 
         //Verificando métricas de Memória
@@ -130,7 +132,7 @@ public class MonitorarService {
         } else if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.50)) {
             frase += ("\nUso de memória na metade da capacidade total! Disponível: " + memoria.getDisponivel());
         } else {
-            frase += ("\nUso de memória na capacidade ideal! Disponível: " + memoria.getDisponivel() );
+            frase += ("\nUso de memória na capacidade ideal! Disponível: " + memoria.getDisponivel());
         }
 
         //Verificando métricas de CPU
@@ -174,6 +176,6 @@ public class MonitorarService {
         }
 
         System.out.println(frase);
-        
+
     }
 }

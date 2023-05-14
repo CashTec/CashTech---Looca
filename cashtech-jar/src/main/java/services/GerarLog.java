@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +43,13 @@ public class GerarLog {
             frase = "Tentativa de login do usuário --" + usuario + "-- ";
         }
 
+        ZonedDateTime horarioBrasilia = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+        LocalDateTime dtMetrica = horarioBrasilia.toLocalDateTime();
+
         //Criar uma arraylist que vai armazenar o registro em si dos logins
         List<String> lista = new ArrayList<>();
         lista.add(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss ")) + frase);
+                dtMetrica.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss ")) + frase);
 
         //A classe Formatter permite que a saída de dados formatados seja
         //enviada para qualquer fluxo baseado em texto de uma maneira semelhante ao método System.out.printf.
