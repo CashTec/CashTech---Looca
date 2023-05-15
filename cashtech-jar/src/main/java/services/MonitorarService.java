@@ -120,7 +120,7 @@ public class MonitorarService {
     }
 
     public void verificarMetricas(Memoria memoria, Processador processador,
-            Volume volume, RedeInterface redeInterface, Integer idEmpresaUsuario) {
+            Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificao, Integer idEmpresaUsuario) {
         List<Parametrizacao> parametrizacao
                 = parametrizarRepository.verParametrizacao(idEmpresaUsuario);
 
@@ -179,6 +179,15 @@ public class MonitorarService {
         }
 
         System.out.println(frase);
+
+        // ===========================================================================
+        // Fazer repository NotificacaoRepository, enviar para o banco de dados a mensagem
+        // descricao do Banco é a mensagem e a idEmpresaUsuario o empresa_id, e dt_notitucacao é o dtNotificacao
+        // utilizar o update na repository
+        // o método da repository é void
+        //
+        // ===========================================================================
+
 
         try{
             MsgSlack.sendMessage(frase);
