@@ -1,0 +1,13 @@
+models/ProcessoPermitido.class
+models/Usuario.class
+cashtech/jar/LoginSwing.class
+services/Login.class
+services/KillProcessos.class
+repositories/MaquinaRepository.class
+services/KillProcessos$1.class
+repositories/ProcessosRepository.class
+cashtech/jar/LoginSwing$2.class
+cashtech/jar/DataBase.class
+services/MaquinaService.class
+repositories/LoginRepository.class
+cashtech/jar/LoginSwing$1.class
