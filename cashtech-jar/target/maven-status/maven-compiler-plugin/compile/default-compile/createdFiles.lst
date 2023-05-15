@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 repositories\MaquinaRepository.class
 Util\ComparadorUsoProcesso.class
 cashtech\jar\LoginSwing$1.class
@@ -20,3 +21,5 @@ services\LoginService.class
 services\MonitorarService$1.class
 services\KillProcessosService.class
 services\GerarLog.class
+=======
+>>>>>>> 636931944c89eececc90b646790f3c3f7bfa450c
