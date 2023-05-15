@@ -15,7 +15,7 @@ public class DataBaseDocker {
 
     private String porta = "3306";
 
-    private String servidor = "54.173.162.154";
+    private String servidor = "localhost";
 
     private String bancoDeDados = "cashtech";
 

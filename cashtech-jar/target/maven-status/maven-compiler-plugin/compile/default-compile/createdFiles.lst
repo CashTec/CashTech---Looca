@@ -5,6 +5,7 @@ repositories\LoginRepository.class
 services\KillProcessosService$1.class
 services\MonitorarService.class
 repositories\ParametrizarRepository.class
+cashtech\jar\DataBaseDocker.class
 models\Parametrizacao.class
 services\MaquinaService.class
 cashtech\jar\LoginSwing$2.class

@@ -5,6 +5,7 @@
 package services;
 
 import Util.ComparadorUsoProcesso;
+import Util.MsgSlack;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.discos.Volume;
@@ -66,7 +67,7 @@ public class MonitorarService {
                 List<Processo> processos = processoGrupo.getProcessos();
                 RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
                 List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
-                
+
                 ZonedDateTime horarioBrasilia = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
                 LocalDateTime dtMetrica = horarioBrasilia.toLocalDateTime();
 
@@ -80,7 +81,7 @@ public class MonitorarService {
                     Integer idVolume = (Integer) volume.get("id");
                     String pontoMontagemTodo = (String) volume.get("ponto_montagem");
                     String pontoMontagem = pontoMontagemTodo.endsWith("\\") ? pontoMontagemTodo.substring(0, pontoMontagemTodo.lastIndexOf("\\")) : pontoMontagemTodo;
-                    
+
                     Optional<Volume> volumeOptional = volumes.stream().filter(v -> v.getPontoDeMontagem().equals(pontoMontagem)).findFirst();
                     volumeMonitorado = volumeOptional.get();
                     monitorarRepository.enviarMetrica(idVolume, dtMetrica, volumeMonitorado.getDisponivel());
@@ -178,6 +179,12 @@ public class MonitorarService {
         }
 
         System.out.println(frase);
+
+        try{
+            MsgSlack.sendMessage(frase);
+        }catch(Exception e){
+            System.out.println("Erro ao enviar mensagem para o Slack");
+        }
 
     }
 }
