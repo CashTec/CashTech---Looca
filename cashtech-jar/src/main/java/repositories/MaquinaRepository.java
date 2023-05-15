@@ -108,7 +108,7 @@ public class MaquinaRepository {
                     + "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)"
                     + "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC))";
         } else {
-            scriptSelect = "(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
+            scriptSelect = "(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1)";
             script = "INSERT INTO Componente"
                     + "(tipo,nome,modelo,serie,frequencia,qtd_cpu_logica,"
                     + "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)"
@@ -164,7 +164,7 @@ public class MaquinaRepository {
                                 // qtd_cpu_fisica
                                 volumes.get(i).getTotal(),//qtd_maxima
                                 volumes.get(i).getDisponivel(),// qtd_disponivel
-                                volumes.get(i).getPontoDeMontagem(), // ponto_montagem
+                                volumes.get(i).getPontoDeMontagem().endsWith("\\") ? volumes.get(i).getPontoDeMontagem() + "\\" : volumes.get(i).getPontoDeMontagem(), // ponto_montagem
                                 volumes.get(i).getTipo(),
                                 scriptSelect); // sistema_arquivos;
                     } else {
@@ -178,7 +178,7 @@ public class MaquinaRepository {
                                 // qtd_cpu_fisica
                                 volumes.get(i).getTotal(),//qtd_maxima
                                 volumes.get(i).getDisponivel(),// qtd_disponivel
-                                volumes.get(i).getPontoDeMontagem(), // ponto_montagem
+                                volumes.get(i).getPontoDeMontagem().endsWith("\\") ? volumes.get(i).getPontoDeMontagem() + "\\" : volumes.get(i).getPontoDeMontagem(), // ponto_montagem
                                 volumes.get(i).getTipo(),
                                 scriptSelect);
                     }
@@ -187,7 +187,7 @@ public class MaquinaRepository {
                         + " (tipo,nome,modelo,serie,frequencia,qtd_cpu_logica,"
                         + " qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)"
                         + " VALUES %s;", values);
-                
+
                 con.update(scriptDisco);
                 break;
 

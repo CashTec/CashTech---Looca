@@ -5,6 +5,7 @@
 package repositories;
 
 import cashtech.jar.DataBase;
+import cashtech.jar.DataBaseDocker;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.processos.Processo;
 import java.sql.Timestamp;
@@ -22,8 +23,10 @@ import org.springframework.jdbc.core.SingleColumnRowMapper;
 public class ProcessosRepository {
 
     DataBase conexao = new DataBase();
+    DataBaseDocker baseDocker = new DataBaseDocker();
 
     JdbcTemplate con = conexao.getConnection();
+    JdbcTemplate conDocker = baseDocker.getConnection();
 
     Looca looca = new Looca();
     Processo processo;
@@ -54,7 +57,6 @@ public class ProcessosRepository {
             }
 
         }
-
         con.update(script);
     }
 
@@ -80,6 +82,11 @@ public class ProcessosRepository {
                     + " `id_dead`, `dt_processo`) "
                     + "VALUES (NULL,?,?, ?, ?, ?, ?, ?, 1, ?)";
         }
+
+        conDocker.update(script,
+                idAtm, processo.getNome(), processo.getPid(), processo.getUsoCpu(), processo.getUsoMemoria(),
+                processo.getBytesUtilizados(), processo.getMemoriaVirtualUtilizada(),
+                dataHora);
 
         con.update(script,
                 idAtm, processo.getNome(), processo.getPid(), processo.getUsoCpu(), processo.getUsoMemoria(),
@@ -122,6 +129,7 @@ public class ProcessosRepository {
                 + " id_dead, dt_processo) "
                 + "VALUES %s", values);
 
+        conDocker.update(script);
         con.update(script);
     }
 }

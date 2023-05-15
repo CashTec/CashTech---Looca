@@ -26,7 +26,7 @@ public class ParametrizarRepository {
                         + "qtd_bytes_recebido_max, "
                         + "qtd_memoria_max, "
                         + "qtd_disco_max "
-                        + "from parametrizacao where empresa_id = ?",
+                        + "from Parametrizacao where empresa_id = ?",
                 new BeanPropertyRowMapper<>(Parametrizacao.class), empresaID);
     }
     

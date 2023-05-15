@@ -38,3 +38,25 @@ Registro de login:
  N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:58:05
 Registro de login: 
  N:º01 O usuário pedro fez login nesse horário e data: quinta-feira, 11 de maio de 2023 16:59:50
+14/05/2023 19:24:54 Tentativa de login do usuário --a-- 
+14/05/2023 19:25:02 Tentativa de login do usuário --asd-- 
+14/05/2023 19:27:44 O usuário --pedro-- fez login
+14/05/2023 19:41:53 O usuário --pedro-- fez login
+14/05/2023 19:46:27 O usuário --pedro-- fez login
+14/05/2023 20:25:28 O usuário --pedro-- fez login
+14/05/2023 20:26:33 O usuário --pedro-- fez login
+14/05/2023 20:29:31 O usuário --pedro-- fez login
+14/05/2023 20:31:16 Tentativa de login do usuário --pedro-- 
+14/05/2023 20:32:37 O usuário --pedro-- fez login
+14/05/2023 20:34:51 O usuário --pedro-- fez login
+14/05/2023 20:37:33 O usuário --pedro-- fez login
+14/05/2023 20:40:45 O usuário --pedro-- fez login
+14/05/2023 20:45:52 O usuário --pedro-- fez login
+14/05/2023 20:49:23 O usuário --pedro-- fez login
+14/05/2023 21:03:09 O usuário --pedro-- fez login
+14/05/2023 21:08:42 O usuário --pedro-- fez login
+14/05/2023 21:15:21 O usuário --pedro-- fez login
+14/05/2023 21:23:08 O usuário --pedro-- fez login
+14/05/2023 21:25:02 O usuário --pedro-- fez login
+14/05/2023 21:26:13 O usuário --pedro-- fez login
+14/05/2023 21:28:48 O usuário --pedro-- fez login
