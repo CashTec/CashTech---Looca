@@ -110,7 +110,7 @@ public class MonitorarService {
                         bytesEnviadosAntigo == null ? 0 : redeInterface.getBytesEnviados() - bytesEnviadosAntigo, dtMetrica);;
 
                 verificarMetricas(memoria, processador, volumeMonitorado,
-                        redeInterface, idEmpresaUsuario);
+                        redeInterface, dtMetrica,idEmpresaUsuario);
 
                 bytesRecebidosAntigo = redeInterface.getBytesRecebidos();
                 bytesEnviadosAntigo = redeInterface.getBytesEnviados();
