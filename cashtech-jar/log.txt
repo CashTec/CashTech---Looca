@@ -63,3 +63,5 @@ Registro de login:
 15/05/2023 12:11:29 O usuário --pedro-- fez login
 15/05/2023 12:26:01 O usuário --pedro-- fez login
 15/05/2023 12:30:39 O usuário --pedro-- fez login
+15/05/2023 17:26:03 O usuário --pedro-- fez login
+15/05/2023 20:35:25 O usuário --pedro-- fez login
