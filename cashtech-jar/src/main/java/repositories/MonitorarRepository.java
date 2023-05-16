@@ -54,48 +54,46 @@ public class MonitorarRepository {
         LocalDateTime inicializado = LocalDateTime.ofInstant(sistema.getInicializado(),
                 ZoneId.systemDefault());
 
-        conDock.update("insert into MetricaSistema (iniciado,tempo_atividade,dt_Metrica,sistema_id)"
-                        + " values (?,?,?,?)",
-                inicializado, sistema.getTempoDeAtividade(), dtMetrica,idSistema);
+        String script = "insert into MetricaSistema (iniciado,tempo_atividade,dt_Metrica,sistema_id)"
+                + " values (?,?,?,?)";
 
-        con.update("insert into MetricaSistema (iniciado,tempo_atividade,dt_Metrica,sistema_id)"
-                + " values (?,?,?,?)",
-                inicializado, sistema.getTempoDeAtividade(), dtMetrica, idSistema);
+        conDock.update(script, inicializado, sistema.getTempoDeAtividade(), dtMetrica,idSistema);
+        con.update(script, inicializado, sistema.getTempoDeAtividade(), dtMetrica, idSistema);
     }
 
     public void enviarMetrica(Integer componenteId, LocalDateTime dtMetrica, Double qtdConsumido) {
-        conDock.update("insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)",
-                qtdConsumido, dtMetrica, componenteId);
-        con.update("insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)",
-                qtdConsumido, dtMetrica, componenteId);
+        String script = "insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)";
+
+        conDock.update(script, qtdConsumido, dtMetrica, componenteId);
+
+        con.update(script, qtdConsumido, dtMetrica, componenteId);
     }
 
     public void enviarMetrica(Integer componenteId, LocalDateTime dtMetrica, Long qtdConsumido) {
 
-        conDock.update("insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)",
-        qtdConsumido, dtMetrica, componenteId);
+        String script = "insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)";
 
-        con.update("insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)",
-                qtdConsumido, dtMetrica, componenteId);
+        conDock.update(script, qtdConsumido, dtMetrica, componenteId);
+        con.update(script, qtdConsumido, dtMetrica, componenteId);
     }
 
     public void enviarMetrica(Integer componenteId, LocalDateTime dtMetrica, Integer qtdConsumido) {
-        conDock.update("insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)",
-                qtdConsumido, dtMetrica, componenteId);
+        String script = "insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)";
+        conDock.update(script, qtdConsumido, dtMetrica, componenteId);
 
-        con.update("insert into MetricaComponente (qtd_consumido,dt_metrica,componente_id) values (?,?,?)",
-                qtdConsumido, dtMetrica, componenteId);
+        con.update(script, qtdConsumido, dtMetrica, componenteId);
     }
 
     public void enviarMetricaRede(Integer redeId, Long bytesRecebidosSegundo,
             Long bytesEnviadosSegundo, LocalDateTime dtMetrica) {
 
-        conDock.update("insert into MetricaRedeInterface (bytes_recebidos_segundo,"
-                        + "bytes_enviados_segundo,dt_metrica,network_interface_id) values (?,?,?,?)",
+        String script = "insert into MetricaRedeInterface (bytes_recebidos_segundo,"
+                + "bytes_enviados_segundo,dt_metrica,network_interface_id) values (?,?,?,?)";
+
+        conDock.update(script,
                 bytesRecebidosSegundo, bytesEnviadosSegundo, dtMetrica, redeId);
 
-        con.update("insert into MetricaRedeInterface (bytes_recebidos_segundo,"
-                + "bytes_enviados_segundo,dt_metrica,network_interface_id) values (?,?,?,?)",
+        con.update(script,
                 bytesRecebidosSegundo, bytesEnviadosSegundo, dtMetrica, redeId);
     }
 }

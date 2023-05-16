@@ -46,7 +46,7 @@ public class ProcessosRepository {
                 }
             }
 
-            scriptDocker = "INSERT INTO `cashtech`.`ProcessoPermitido` (`id`, `nome`, `empresa_id`) VALUES ";
+            scriptDocker = "INSERT INTO ProcessoPermitido (id, nome, empresa_id) VALUES ";
             for (int i = 0; i < processos.size(); i++) {
                 String processo = processos.get(i);
                 if (i == processos.size() - 1) {

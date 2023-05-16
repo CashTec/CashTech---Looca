@@ -32,47 +32,31 @@ public class MaquinaRepository {
 
     DataBaseDocker conexaoDocker = new DataBaseDocker();
 
-    public JdbcTemplate conDock = conexao.getConnection();
+    public JdbcTemplate conDock = conexaoDocker.getConnection();
 
-    public JdbcTemplate con = conexaoDocker.getConnection();
+    public JdbcTemplate con = conexao.getConnection();
 
     public void cadastrarSistema(Sistema sistema) {
         String script;
-        if (conexao.getAmbiente().equals("producao")) {
             // Query do SQL
             script = "INSERT INTO Sistema (nome,fabricante,arquitetura) VALUES"
                     + "(?,?,?)";
-        } else {
-            script = "INSERT INTO `cashtech`.`Sistema` (`id`, `nome`, `fabricante`, `arquitetura`)"
-                    + " VALUES (null,?, ?, ?)";
-        }
 
-        conDock.update("INSERT INTO `cashtech`.`Sistema` (`id`, `nome`, `fabricante`, `arquitetura`)"
-                + " VALUES (null,?, ?, ?)", sistema.getSistemaOperacional(), sistema.getFabricante(), sistema.getArquitetura());
+        conDock.update(script, sistema.getSistemaOperacional(), sistema.getFabricante(), sistema.getArquitetura());
 
         con.update(script,
                 sistema.getSistemaOperacional(), sistema.getFabricante(), sistema.getArquitetura());
     }
 
     public void cadastrarEndereco() {
-        String script;
-        if (conexao.getAmbiente().equals("producao")) {
-            // Query do SQL
-            script = "INSERT INTO Endereco (rua, bairro, numero, cep) "
-                    + "VALUES (NULL, NULL, NULL, NULL)";
-        } else {
-            script = "INSERT INTO `cashtech`.`Endereco` (`id`, `rua`, `bairro`, `numero`, `cep`) "
-                    + "VALUES (NULL, NULL, NULL, NULL, NULL)";
-        }
-
-        conDock.update("INSERT INTO `cashtech`.`Endereco` (`id`, `rua`, `bairro`, `numero`, `cep`) "
-                + "VALUES (NULL, NULL, NULL, NULL, NULL)");
+        String script = "INSERT INTO Endereco (rua, bairro, numero, cep) VALUES (NULL, NULL, NULL, NULL)";
 
         con.update(script);
     }
 
     public void cadastrarInterfaceRede(RedeInterface redeDado) {
-        String script = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) VALUES(?,?,?,?,?,(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC))";
+        String script = "INSERT INTO NetworkInterface (nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id) " +
+                "VALUES (?,?,?,?,?,(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC))";
         con.update(
                 script,
                 redeDado.getNome(),
@@ -81,9 +65,12 @@ public class MaquinaRepository {
                 redeDado.getEnderecoIpv6().get(0),
                 redeDado.getEnderecoMac()
         );
-        String scriptDocker = "INSERT INTO NetworkInterface(nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id)" +
-                " VALUES(?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
+
+        String scriptDocker = "INSERT INTO NetworkInterface (nome,nome_exibicao,ipv4,ipv6,mac,caixa_eletronico_id)" +
+                " VALUES (?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
+
         conDock.update(scriptDocker,
+                redeDado.getNome(),
                 redeDado.getNomeExibicao(),
                 redeDado.getEnderecoIpv4().get(0),
                 redeDado.getEnderecoIpv6().get(0),
@@ -96,9 +83,9 @@ public class MaquinaRepository {
                 + "VALUES (?, 'ativo', ?, (SELECT TOP 1 id FROM endereco ORDER BY id DESC),"
                 + "(SELECT TOP 1 id FROM Sistema ORDER BY id DESC))";
 
-        String scriptDocker = "INSERT INTO `cashtech`.`CaixaEletronico` "
-                + "(`id`, `identificador`, `situacao`, `empresa_id`, `endereco_id`, `sistema_id`) "
-                + "VALUES (NULL,?,'ativo', ?, (select id from Endereco order by id desc limit 1),"
+        String scriptDocker = "INSERT INTO CaixaEletronico "
+                + "(id, identificador, situacao, empresa_id, endereco_id, sistema_id) "
+                + "VALUES (NULL,?,'ativo', ?, null,"
                 + "(select id from Sistema order by id desc limit 1));";
 
         con.update(script,
@@ -122,10 +109,9 @@ public class MaquinaRepository {
                 + "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)"
                 + "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT TOP 1 id FROM CaixaEletronico ORDER BY id DESC))";
 
+
         String scriptSelectDocker = "(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1)";
-
-
-        String scriptDocker = "\"INSERT INTO Componente"
+        String scriptDocker = "INSERT INTO Componente"
                 + "(tipo,nome,modelo,serie,frequencia,qtd_cpu_logica,"
                 + "qtd_cpu_fisica,qtd_maxima,qtd_disponivel,ponto_montagem,sistema_arquivos,caixa_eletronico_id)"
                 + "VALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT id FROM CaixaEletronico ORDER BY id DESC LIMIT 1))";
