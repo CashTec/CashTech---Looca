@@ -62,26 +62,13 @@
 
 
         <!-- ================ Depedencias para o Slack ================ -->
-        <!-- https://mvnrepository.com/artifact/com.github.seratch/jslack -->
+        <!-- https://mvnrepository.com/artifact/org.infrastructurebuilder/ibcore-vertx-base -->
         <dependency>
-            <groupId>com.github.seratch</groupId>
-            <artifactId>jslack</artifactId>
-            <version>3.4.2</version>
+            <groupId>org.infrastructurebuilder</groupId>
+            <artifactId>ibcore-vertx-base</artifactId>
+            <version>0.20.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5 -->
-        <dependency>
-            <groupId>org.apache.httpcomponents.client5</groupId>
-            <artifactId>httpclient5</artifactId>
-            <version>5.2.1</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-            <version>4.5.14</version>
-        </dependency>
-        <!-- ==================================================== -->
-
+        <!-- ============================================================ -->
     </dependencies>
     
     <!-- ============ Para buildar o projeto, JAR executável ========= -->
