@@ -19,7 +19,7 @@ public class ParametrizarRepository {
 
     JdbcTemplate con = conexao.getConnection();
 
-    public List<Parametrizacao> verParametrizacao(Integer empresaID){
+    public List<Parametrizacao> verParametrizacao(Integer empresaID) {
         return con.query(
                 "select qtd_cpu_max, "
                         + "qtd_bytes_enviado_max, "
@@ -29,16 +29,4 @@ public class ParametrizarRepository {
                         + "from Parametrizacao where empresa_id = ?",
                 new BeanPropertyRowMapper<>(Parametrizacao.class), empresaID);
     }
-    
-//    public void atualizarParametrizacao
-//        (Integer empresaID, Integer qtdCpuMax, Long qtdBytesEnviadoMax, 
-//                Long qtdBytesRecebidoMax, Long qtdMemoriaMax, Long qtdDiscoMax) {
-//    con.update(
-//        "update parametrizacao set qtd_cpu_max = ?, qtd_bytes_enviado_max = ?,"
-//                + " qtd_bytes_recebido_max = ?, qtd_memoria_max = ?, "
-//                + "qtd_disco_max = ? where empresa_id = ?",
-//        qtdCpuMax, qtdBytesEnviadoMax, qtdBytesRecebidoMax, 
-//        qtdMemoriaMax, qtdDiscoMax, empresaID
-//    );
-//}
 }

@@ -4,6 +4,10 @@
  */
 package cashtech.jar;
 
+import com.github.britooo.looca.api.core.Looca;
+import com.github.britooo.looca.api.group.rede.Rede;
+import com.github.britooo.looca.api.group.rede.RedeInterface;
+import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -13,7 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class DataBaseDocker {
 
-    private String porta = "3306";
+    Looca looca = new Looca();
 
     private String servidor = "localhost";
 
@@ -21,7 +25,8 @@ public class DataBaseDocker {
 
     private String login = "root";
 
-    private String senha = "xrm847daebak";
+    private String senha = "root";
+
 
     private JdbcTemplate connection;
 

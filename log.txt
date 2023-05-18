@@ -16,14 +16,3 @@
 16/05/2023 14:28:00 O usuário --pedro-- fez login
 16/05/2023 15:52:28 O usuário --pedro-- fez login
 16/05/2023 15:56:21 O usuário --pedro-- fez login
-17/05/2023 17:27:04 O usuário --pedro-- fez login
-17/05/2023 17:28:38 O usuário --pedro-- fez login
-17/05/2023 17:30:05 O usuário --pedro-- fez login
-17/05/2023 17:37:40 O usuário --pedro-- fez login
-17/05/2023 18:00:37 O usuário --pedro-- fez login
-17/05/2023 18:03:08 O usuário --pedro-- fez login
-17/05/2023 18:03:48 O usuário --pedro-- fez login
-17/05/2023 18:10:22 O usuário --pedro-- fez login
-17/05/2023 18:16:29 O usuário --pedro-- fez login
-17/05/2023 18:48:15 O usuário --pedro-- fez login
-17/05/2023 18:55:12 O usuário --pedro-- fez login
