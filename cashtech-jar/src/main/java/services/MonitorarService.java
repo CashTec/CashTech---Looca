@@ -37,6 +37,7 @@ import java.util.TimerTask;
 
 import repositories.ProcessosRepository;
 import models.Parametrizacao;
+import repositories.NotificacaoRepository;
 import slack.configuration.Slack;
 
 /**
@@ -47,6 +48,7 @@ public class MonitorarService {
     MonitorarRepository monitorarRepository = new MonitorarRepository();
     ProcessosRepository processosRepository = new ProcessosRepository();
     ParametrizarRepository parametrizarRepository = new ParametrizarRepository();
+    NotificacaoRepository notificacaoRepository = new NotificacaoRepository();
 
     private Integer countSeconds = 6;
 
@@ -128,7 +130,7 @@ public class MonitorarService {
     }
 
     public void verificarMetricas(Memoria memoria, Processador processador,
-                                  Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificao, Integer idEmpresaUsuario) {
+            Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificacao, Integer idEmpresaUsuario) {
         if (isTwentySeconds()) {
 
             List<Parametrizacao> parametrizacao
@@ -142,6 +144,7 @@ public class MonitorarService {
             if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
                 frase += ("\n\nALERTA!!! ALERTA!!!"
                         + "\nUso de memória atingindo o limite! Disponível: " + memoria.getDisponivel());
+
             } else if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.50)) {
                 frase += ("\n\nUso de memória na metade da capacidade total! Disponível: " + memoria.getDisponivel());
             }
@@ -180,13 +183,7 @@ public class MonitorarService {
 
             System.out.println(frase);
 
-            // ===========================================================================
-            // Fazer repository NotificacaoRepository, enviar para o banco de dados a mensagem
-            // descricao do Banco é a mensagem e a idEmpresaUsuario o empresa_id, e dt_notitucacao é o dtNotificacao
-            // utilizar o update na repository
-            // o método da repository é void
-            //
-            // ===========================================================================
+            notificacaoRepository.enviarNotificacao(frase, idEmpresaUsuario, dtNotificacao);
 
             try {
                 JSONObject json = new JSONObject();
@@ -196,7 +193,6 @@ public class MonitorarService {
                 System.out.println("Erro ao enviar mensagem para o Slack");
             }
         }
-
 
     }
 
