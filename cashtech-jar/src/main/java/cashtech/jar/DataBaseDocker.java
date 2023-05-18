@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class DataBaseDocker {
 
-    private String porta = "3306";
+    private String porta = "3307";
 
     private String servidor = "localhost";
 
@@ -21,7 +21,7 @@ public class DataBaseDocker {
 
     private String login = "root";
 
-    private String senha = "xrm847daebak";
+    private String senha = "root";
 
     private JdbcTemplate connection;
 

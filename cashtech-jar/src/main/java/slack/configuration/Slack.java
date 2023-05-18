@@ -10,9 +10,10 @@ import java.net.http.HttpResponse;
 
 public class Slack {
     private static HttpClient client = HttpClient.newHttpClient();
-    private static final String url = "https://hooks.slack.com/services/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";
+    private static String url = "";
 
     public static void sendMessage(JSONObject content) throws Exception, IOException, InterruptedException {
+
         HttpRequest request = HttpRequest.newBuilder(
                         URI.create(url))
                 .header("accept", "application/json")
@@ -20,11 +21,14 @@ public class Slack {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() != 200) {
-            System.out.println("Mensagem enviada no Slack!");
-        }
+        System.out.println("Resposta: " + response.statusCode());
     }
 
+    public static String getUrl() {
+        return url;
+    }
 
+    public static void setUrl(String url) {
+        Slack.url = url;
+    }
 }
