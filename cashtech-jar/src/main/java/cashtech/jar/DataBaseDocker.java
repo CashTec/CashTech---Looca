@@ -17,15 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class DataBaseDocker {
 
-        Looca looca = new Looca();
-
-        Rede rede = looca.getRede();
-
-        RedeInterfaceGroup redes = rede.getGrupoDeInterfaces();
-
-
-
-    private String porta = "3307";
+    Looca looca = new Looca();
 
     private String servidor = "localhost";
 
@@ -34,6 +26,7 @@ public class DataBaseDocker {
     private String login = "root";
 
     private String senha = "root";
+
 
     private JdbcTemplate connection;
 

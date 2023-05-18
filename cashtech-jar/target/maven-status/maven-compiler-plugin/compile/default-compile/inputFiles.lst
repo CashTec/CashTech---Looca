@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\Util\ComparadorUsoProcesso.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\cashtech\jar\DataBaseDocker.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\LoginRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\models\Usuario.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\cashtech\jar\LoginSwing.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\models\ProcessoPermitido.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\LoginService.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\models\Parametrizacao.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\MonitorarService.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\ProcessosRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\MaquinaRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\GerarLog.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\MonitorarRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\repositories\ParametrizarRepository.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\MaquinaService.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\models\Componente.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\services\KillProcessosService.java
+C:\Users\muril\Documents\Repositórios GitHub\CashTech-APP\cashtech-jar\src\main\java\cashtech\jar\DataBase.java
+=======
 /home/kanaiama/Documentos/CashTech-Looca/cashtech-jar/src/main/java/services/LoginService.java
 /home/kanaiama/Documentos/CashTech-Looca/cashtech-jar/src/main/java/models/Componente.java
 /home/kanaiama/Documentos/CashTech-Looca/cashtech-jar/src/main/java/models/Usuario.java
@@ -16,3 +36,4 @@
 /home/kanaiama/Documentos/CashTech-Looca/cashtech-jar/src/main/java/services/MaquinaService.java
 /home/kanaiama/Documentos/CashTech-Looca/cashtech-jar/src/main/java/repositories/ProcessosRepository.java
 /home/kanaiama/Documentos/CashTech-Looca/cashtech-jar/src/main/java/repositories/LoginRepository.java
+>>>>>>> 636931944c89eececc90b646790f3c3f7bfa450c

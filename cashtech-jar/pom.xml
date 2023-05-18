@@ -7,8 +7,8 @@
     <packaging>jar</packaging> 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
     <name>cashtech-jar</name>
     
@@ -59,6 +59,16 @@
         </dependency>
 
         <!-- ==================================================== -->
+
+
+        <!-- ================ Depedencias para o Slack ================ -->
+        <!-- https://mvnrepository.com/artifact/org.infrastructurebuilder/ibcore-vertx-base -->
+        <dependency>
+            <groupId>org.infrastructurebuilder</groupId>
+            <artifactId>ibcore-vertx-base</artifactId>
+            <version>0.20.0</version>
+        </dependency>
+        <!-- ============================================================ -->
     </dependencies>
     
     <!-- ============ Para buildar o projeto, JAR executável ========= -->

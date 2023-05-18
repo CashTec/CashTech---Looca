@@ -16,12 +16,17 @@ import com.github.britooo.looca.api.group.rede.Rede;
 import com.github.britooo.looca.api.group.rede.RedeInterface;
 import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
 import com.github.britooo.looca.api.group.sistema.Sistema;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
+
+import org.json.JSONObject;
 import repositories.MonitorarRepository;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+
 import repositories.ParametrizarRepository;
 
 import java.util.List;
@@ -29,11 +34,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import repositories.ProcessosRepository;
 import models.Parametrizacao;
+import repositories.NotificacaoRepository;
+import slack.configuration.Slack;
 
 /**
- *
  * @author murilo
  */
 public class MonitorarService {
@@ -41,6 +48,9 @@ public class MonitorarService {
     MonitorarRepository monitorarRepository = new MonitorarRepository();
     ProcessosRepository processosRepository = new ProcessosRepository();
     ParametrizarRepository parametrizarRepository = new ParametrizarRepository();
+    NotificacaoRepository notificacaoRepository = new NotificacaoRepository();
+
+    private Integer countSeconds = 6;
 
     public void monitorarHardware(Integer idAtm, Integer idEmpresaUsuario) {
 
@@ -53,6 +63,7 @@ public class MonitorarService {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             Long bytesRecebidosAntigo = null;
             Long bytesEnviadosAntigo = null;
+
             @Override
             public void run() {
                 Looca looca = new Looca();
@@ -66,7 +77,7 @@ public class MonitorarService {
                 List<Processo> processos = processoGrupo.getProcessos();
                 RedeInterfaceGroup redeInterfaceGroup = rede.getGrupoDeInterfaces();
                 List<RedeInterface> redeInterfaces = redeInterfaceGroup.getInterfaces();
-                
+
                 ZonedDateTime horarioBrasilia = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
                 LocalDateTime dtMetrica = horarioBrasilia.toLocalDateTime();
 
@@ -80,7 +91,7 @@ public class MonitorarService {
                     Integer idVolume = (Integer) volume.get("id");
                     String pontoMontagemTodo = (String) volume.get("ponto_montagem");
                     String pontoMontagem = pontoMontagemTodo.endsWith("\\") ? pontoMontagemTodo.substring(0, pontoMontagemTodo.lastIndexOf("\\")) : pontoMontagemTodo;
-                    
+
                     Optional<Volume> volumeOptional = volumes.stream().filter(v -> v.getPontoDeMontagem().equals(pontoMontagem)).findFirst();
                     volumeMonitorado = volumeOptional.get();
                     monitorarRepository.enviarMetrica(idVolume, dtMetrica, volumeMonitorado.getDisponivel());
@@ -105,11 +116,11 @@ public class MonitorarService {
 
                 processosRepository.cadastrarProcessosAgora(idAtm, topVinteProcessos, dtMetrica);
                 monitorarRepository.enviarMetricaRede(idRede,
-                       bytesRecebidosAntigo == null ? 0 : redeInterface.getBytesRecebidos() - bytesRecebidosAntigo,
-                        bytesEnviadosAntigo == null ? 0 : redeInterface.getBytesEnviados() - bytesEnviadosAntigo, dtMetrica);;
+                        bytesRecebidosAntigo == null ? 0 : redeInterface.getBytesRecebidos() - bytesRecebidosAntigo,
+                        bytesEnviadosAntigo == null ? 0 : redeInterface.getBytesEnviados() - bytesEnviadosAntigo, dtMetrica);
 
                 verificarMetricas(memoria, processador, volumeMonitorado,
-                        redeInterface, idEmpresaUsuario);
+                        redeInterface, dtMetrica, idEmpresaUsuario);
 
                 bytesRecebidosAntigo = redeInterface.getBytesRecebidos();
                 bytesEnviadosAntigo = redeInterface.getBytesEnviados();
@@ -119,65 +130,78 @@ public class MonitorarService {
     }
 
     public void verificarMetricas(Memoria memoria, Processador processador,
-            Volume volume, RedeInterface redeInterface, Integer idEmpresaUsuario) {
-        List<Parametrizacao> parametrizacao
-                = parametrizarRepository.verParametrizacao(idEmpresaUsuario);
+            Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificacao, Integer idEmpresaUsuario) {
+        if (isTwentySeconds()) {
 
-        Parametrizacao usuario = parametrizacao.get(0);
+            List<Parametrizacao> parametrizacao
+                    = parametrizarRepository.verParametrizacao(idEmpresaUsuario);
 
-        String frase = "";
+            Parametrizacao usuario = parametrizacao.get(0);
 
-        //Verificando métricas de Memória
-        if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
-            frase += ("\nALERTA!!! ALERTA!!!"
-                    + " Uso de memória atingindo o limite! Disponível: " + memoria.getDisponivel());
-        } else if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.50)) {
-            frase += ("\nUso de memória na metade da capacidade total! Disponível: " + memoria.getDisponivel());
-        } else {
-            frase += ("\nUso de memória na capacidade ideal! Disponível: " + memoria.getDisponivel());
+            String frase = "";
+
+            //Verificando métricas de Memória
+            if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
+                frase += ("\n\nALERTA!!! ALERTA!!!"
+                        + "\nUso de memória atingindo o limite! Disponível: " + memoria.getDisponivel());
+
+            } else if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.50)) {
+                frase += ("\n\nUso de memória na metade da capacidade total! Disponível: " + memoria.getDisponivel());
+            }
+
+            //Verificando métricas de CPU
+            if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.75)) {
+                frase += ("\n\nALERTA!!! ALERTA!!!"
+                        + " \nUso de processador atingindo o limite! Disponível: " + processador.getUso());
+            } else if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.5)) {
+                frase += ("\n\nUso de processador na metade da capacidade total! Disponível: " + processador.getUso());
+            }
+
+            //Verificando métricas de Disco/Volume
+            if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.75)) {
+                frase += ("\n\nALERTA!!! ALERTA!!!"
+                        + "\n Uso de disco/volume atingindo o limite! Disponível: " + volume.getDisponivel());
+            } else if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.5)) {
+                frase += ("\n\nUso de disco/volume na metade da capacidade total! Disponível: " + volume.getDisponivel());
+            }
+
+            //Verificando métricas de bytes enviados de Rede
+            if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.75)) {
+                frase += ("\n\nALERTA!!! ALERTA!!!"
+                        + "\n Uso de bytes enviados atingindo o limite! Disponível: " + redeInterface.getBytesEnviados());
+            } else if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.5)) {
+                frase += ("\n\nUso de bytes enviados na metade da capacidade total! Disponível: " + redeInterface.getBytesEnviados());
+            }
+
+            //Verificando métricas de bytes recebidos da Rede
+            if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.75)) {
+                frase += ("\n\nALERTA!!! ALERTA!!!"
+                        + "\n Uso de bytes recebidos atingindo o limite! Disponível: " + redeInterface.getBytesRecebidos());
+            } else if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.5)) {
+                frase += ("\n\nUso de bytes recebidos na metade da capacidade total! Disponível: " + redeInterface.getBytesRecebidos());
+            }
+
+            System.out.println(frase);
+
+            notificacaoRepository.enviarNotificacao(frase, idEmpresaUsuario, dtNotificacao);
+
+            try {
+                JSONObject json = new JSONObject();
+                json.put("text", frase);
+                Slack.sendMessage(json);
+            } catch (Exception e) {
+                System.out.println("Erro ao enviar mensagem para o Slack");
+            }
         }
 
-        //Verificando métricas de CPU
-        if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.75)) {
-            frase += ("\nALERTA!!! ALERTA!!!"
-                    + " Uso de processador atingindo o limite! Disponível: " + processador.getUso());
-        } else if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.5)) {
-            frase += ("\nUso de processador na metade da capacidade total! Disponível: " + processador.getUso());
-        } else {
-            frase += ("\nUso de processador na capacidade ideal! Disponível: " + processador.getUso());
+    }
+
+    public Boolean isTwentySeconds() {
+        countSeconds++;
+        if (countSeconds == 7) {
+            countSeconds = 0;
+            return true;
         }
-
-        //Verificando métricas de Disco/Volume
-        if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.75)) {
-            frase += ("\nALERTA!!! ALERTA!!!"
-                    + " Uso de disco/volume atingindo o limite! Disponível: " + volume.getDisponivel());
-        } else if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.5)) {
-            frase += ("\nUso de disco/volume na metade da capacidade total! Disponível: " + volume.getDisponivel());
-        } else {
-            frase += ("\nUso de disco/volume na capacidade ideal! Disponível: " + volume.getDisponivel());
-        }
-
-        //Verificando métricas de bytes enviados de Rede
-        if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.75)) {
-            frase += ("\nALERTA!!! ALERTA!!!"
-                    + " Uso de bytes enviados atingindo o limite! Disponível: " + redeInterface.getBytesEnviados());
-        } else if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.5)) {
-            frase += ("\nUso de bytes enviados na metade da capacidade total! Disponível: " + redeInterface.getBytesEnviados());
-        } else {
-            frase += ("\nUso de bytes enviados na capacidade ideal! Disponível: " + redeInterface.getBytesEnviados());
-        }
-
-        //Verificando métricas de bytes recebidos da Rede
-        if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.75)) {
-            frase += ("\nALERTA!!! ALERTA!!!"
-                    + " Uso de bytes recebidos atingindo o limite! Disponível: " + redeInterface.getBytesRecebidos());
-        } else if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.5)) {
-            frase += ("\nUso de bytes recebidos na metade da capacidade total! Disponível: " + redeInterface.getBytesRecebidos());
-        } else {
-            frase += ("\nUso de bytes recebidos na capacidade ideal! Disponível: " + redeInterface.getBytesRecebidos());
-        }
-
-        System.out.println(frase);
-
+        return false;
     }
 }

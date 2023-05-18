@@ -50,16 +50,6 @@ public class MaquinaService {
         executar.cadastrarComponente(processador, memoria, grupoDeDiscos, "memoria");
         executar.cadastrarComponente(processador, memoria, grupoDeDiscos, "disco");
 
-        //CADASTRAR INTERFACE DA REDE
-//        List<RedeInterface> redes = rede.getGrupoDeInterfaces().getInterfaces();;
-//        RedeInterface redeDado = null;
-//        for (RedeInterface redeItem : redes) {
-//            if (redeItem.getBytesEnviados() > 0 || redeItem.getBytesRecebidos() > 0) {
-//                redeDado = redeItem;
-//            }
-//        }
-//        if (redeDado != null) {
-//        }
         Optional<RedeInterface> optRedeInterface = redeInterfaces.stream().filter(
                 r -> r.getBytesEnviados() > 0 || r.getBytesRecebidos() > 0).findFirst();
 
