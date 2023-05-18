@@ -33,8 +33,8 @@ public class ProcessosRepository {
 
     public void cadastrarProcessosPermitidosPadrao(List<String> processos, Integer empresaId) {
         String script;
+        String scriptDocker;
 
-        if (conexao.getAmbiente().equals("producao")) {
             // Query do SQL
             script = "INSERT INTO ProcessoPermitido (nome, empresa_id) VALUES ";
             for (int i = 0; i < processos.size(); i++) {
@@ -45,8 +45,8 @@ public class ProcessosRepository {
                     script += String.format("('%s',%d), ", processo, empresaId);
                 }
             }
-        } else {
-            script = "INSERT INTO `cashtech`.`ProcessoPermitido` (`id`, `nome`, `empresa_id`) VALUES ";
+
+            scriptDocker = "INSERT INTO ProcessoPermitido (id, nome, empresa_id) VALUES ";
             for (int i = 0; i < processos.size(); i++) {
                 String processo = processos.get(i);
                 if (i == processos.size() - 1) {
@@ -56,8 +56,8 @@ public class ProcessosRepository {
                 }
             }
 
-        }
         con.update(script);
+            conDocker.update(scriptDocker);
     }
 
     public List<String> processosPermitidos(Integer empresaId) {
@@ -70,18 +70,13 @@ public class ProcessosRepository {
 
     public void cadastrarProcessoKilled(Integer idAtm, Processo processo, LocalDateTime dataHora) {
         String script;
-        if (conexao.getAmbiente().equals("producao")) {
+        String scriptDocker;
             // Query do SQL
             script = "INSERT INTO Processo (caixa_eletronico_id, nome, "
                     + "pid,uso_cpu, uso_memoria, byte_utilizado, memoria_virtual_ultilizada,"
                     + " id_dead, dt_processo) "
                     + "VALUES (?,?, ?, ?, ?, ?, ?, 1, ?)";
-        } else {
-            script = "INSERT INTO `cashtech`.`Processo` (`id`, `caixa_eletronico_id`, `nome`, "
-                    + "`pid`,`uso_cpu`, `uso_memoria`, `byte_utilizado`, `memoria_virtual_ultilizada`,"
-                    + " `id_dead`, `dt_processo`) "
-                    + "VALUES (NULL,?,?, ?, ?, ?, ?, ?, 1, ?)";
-        }
+
 
         conDocker.update(script,
                 idAtm, processo.getNome(), processo.getPid(), processo.getUsoCpu(), processo.getUsoMemoria(),
@@ -128,6 +123,7 @@ public class ProcessosRepository {
                 + "pid,uso_cpu, uso_memoria, byte_utilizado, memoria_virtual_ultilizada,"
                 + " id_dead, dt_processo) "
                 + "VALUES %s", values);
+
 
         conDocker.update(script);
         con.update(script);
