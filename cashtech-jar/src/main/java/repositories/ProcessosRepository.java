@@ -47,18 +47,7 @@ public class ProcessosRepository {
             }
         }
 
-        scriptDocker = "INSERT INTO ProcessoPermitido (id, nome, empresa_id) VALUES ";
-        for (int i = 0; i < processos.size(); i++) {
-            String processo = processos.get(i);
-            if (i == processos.size() - 1) {
-                script += String.format("(NULL, '%s',%d)", processo, empresaId);
-            } else {
-                script += String.format("(NULL,'%s',%d), ", processo, empresaId);
-            }
-        }
-
         con.update(script);
-        conDocker.update(scriptDocker);
     }
 
     public List<String> processosPermitidos(Integer empresaId) {

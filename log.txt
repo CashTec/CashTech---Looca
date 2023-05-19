@@ -52,3 +52,8 @@
 19/05/2023 09:12:48 O usuário --pedro-- fez login
 19/05/2023 13:58:47 O usuário --pedro-- fez login
 19/05/2023 19:18:33 O usuário --pedro-- fez login
+19/05/2023 20:15:17 O usuário --pedro-- fez login
+19/05/2023 20:17:43 O usuário --pedro-- fez login
+19/05/2023 20:18:54 O usuário --pedro-- fez login
+19/05/2023 20:21:59 O usuário --pedro-- fez login
+19/05/2023 20:24:12 O usuário --pedro-- fez login
