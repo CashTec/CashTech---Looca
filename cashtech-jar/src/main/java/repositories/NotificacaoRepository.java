@@ -24,7 +24,7 @@ public class NotificacaoRepository {
 
     public void enviarNotificacao(String frase, Integer empresaId, LocalDateTime dtNotificacao) {
 
-        String script = "insert into Notificacao values (?, ? ,?)";
+        String script = "insert into Notificacao (descricao, dt_notificacao,empresa_id) values (?, ? ,?)";
 
         conAzure.update(script,
                 frase, dtNotificacao, empresaId);

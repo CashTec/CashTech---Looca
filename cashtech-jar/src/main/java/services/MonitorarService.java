@@ -134,7 +134,7 @@ public class MonitorarService {
     }
 
     public void verificarMetricas(Memoria memoria, Processador processador,
-            Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificacao, Integer idEmpresaUsuario) {
+                                  Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificacao, Integer idEmpresaUsuario) {
         if (isTwentySeconds()) {
 
             List<Parametrizacao> parametrizacao
@@ -142,8 +142,10 @@ public class MonitorarService {
 
             Parametrizacao usuario = parametrizacao.get(0);
 
-            Boolean isAchado = false;
+            Boolean isAlerta = false;
+            Boolean hasNotificacao = false;
             String frase = "";
+
             String memoriaConvertida = Conversor.formatarBytes(memoria.getDisponivel());
             String volumeConvertido = Conversor.formatarBytes(volume.getDisponivel());
             String bytesRecebidosConvertido = Conversor.formatarBytes(redeInterface.getBytesRecebidos());
@@ -151,59 +153,66 @@ public class MonitorarService {
 
             //Verificando métricas de Memória
             if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
-                isAchado = true;
-                frase += ("\nUso de memória atingindo o limite! Disponível: " + memoriaConvertida);
+                hasNotificacao = true;
+                isAlerta = true;
+                frase += ("\n:small_orange_diamond: Uso de memória atingindo o limite! Disponível: " + memoriaConvertida);
             } else if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.50)) {
-                frase += ("\n\nUso de memória na metade da capacidade total! Disponível: " + memoriaConvertida);
+                hasNotificacao = true;
+                frase += ("\n:small_blue_diamond: Uso de memória na metade da capacidade total! Disponível: " + memoriaConvertida);
             }
 
             //Verificando métricas de CPU
             if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.75)) {
-                isAchado = true;
-                frase += ("\nUso de processador atingindo o limite! Disponível: " + processador.getUso());
+                hasNotificacao = true;
+                isAlerta = true;
+                frase += ("\n:small_orange_diamond: Uso de processador atingindo o limite! Disponível: " + processador.getUso());
             } else if (processador.getUso() >= (usuario.getQtd_cpu_max() * 0.5)) {
-                frase += ("\n\nUso de processador na metade da capacidade total! Disponível: " + processador.getUso());
+                hasNotificacao = true;
+                frase += ("\n:small_blue_diamond: Uso de processador na metade da capacidade total! Disponível: " + processador.getUso());
             }
 
             //Verificando métricas de Disco/Volume
             if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.75)) {
-                isAchado = true;
-                frase += ("\n Uso de disco/volume atingindo o limite! Disponível: " + volumeConvertido);
+                hasNotificacao = true;
+                isAlerta = true;
+                frase += ("\n:small_orange_diamond: Uso de disco/volume atingindo o limite! Disponível: " + volumeConvertido);
             } else if (volume.getDisponivel() >= (usuario.getQtd_disco_max() * 0.5)) {
-                frase += ("\n\nUso de disco/volume na metade da capacidade total! Disponível: " + volumeConvertido);
+                hasNotificacao = true;
+                frase += ("\n:small_blue_diamond: Uso de disco/volume na metade da capacidade total! Disponível: " + volumeConvertido);
             }
 
             //Verificando métricas de bytes enviados de Rede
             if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.75)) {
-                isAchado = true;
-                frase += ("\n Uso de bytes enviados atingindo o limite! Disponível: " + bytesEnviadosConvertido);
+                hasNotificacao = true;
+                isAlerta = true;
+                frase += ("\n:small_orange_diamond: Uso de bytes enviados atingindo o limite! Disponível: " + bytesEnviadosConvertido);
             } else if (redeInterface.getBytesEnviados() >= (usuario.getQtd_bytes_enviado_max() * 0.5)) {
-                frase += ("\n\nUso de bytes enviados na metade da capacidade total! Disponível: " + bytesEnviadosConvertido);
+                hasNotificacao = true;
+                frase += ("\n:small_blue_diamond: Uso de bytes enviados na metade da capacidade total! Disponível: " + bytesEnviadosConvertido);
             }
 
             //Verificando métricas de bytes recebidos da Rede
             if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.75)) {
-                isAchado = true;
-                frase += ("\n Uso de bytes recebidos atingindo o limite! " + bytesRecebidosConvertido);
+                hasNotificacao = true;
+                isAlerta = true;
+                frase += ("\n:small_orange_diamond: Uso de bytes recebidos atingindo o limite! " + bytesRecebidosConvertido);
             } else if (redeInterface.getBytesRecebidos() >= (usuario.getQtd_bytes_recebido_max() * 0.5)) {
-                frase += ("\n\nUso de bytes recebidos na metade da capacidade total! " + bytesRecebidosConvertido);
+                hasNotificacao = true;
+                frase += ("\n:small_blue_diamond: Uso de bytes recebidos na metade da capacidade total! " + bytesRecebidosConvertido);
             }
 
-            System.out.println(frase);
+            if (hasNotificacao) {
+                System.out.println(frase);
 
-            notificacaoRepository.enviarNotificacao(frase, idEmpresaUsuario, dtNotificacao);
-            if(isAchado) {
-                //adicionar texto antes da frase
-                frase = ":warning::alphabet-yellow-a::alphabet-yellow-l::alphabet-yellow-e::alphabet-yellow-r::alphabet-yellow-t::alphabet-yellow-a::warning:\n" + frase;
+                notificacaoRepository.enviarNotificacao(frase, idEmpresaUsuario, dtNotificacao);
+
+                if (isAlerta) {
+                    //adicionar texto antes da frase
+                    frase = ":warning::alphabet-yellow-a::alphabet-yellow-l::alphabet-yellow-e::alphabet-yellow-r::alphabet-yellow-t::alphabet-yellow-a::warning:\n" + frase;
+                }
+
             }
 
-            try {
-                JSONObject json = new JSONObject();
-                json.put("text", frase);
-                Slack.sendMessage(json);
-            } catch (Exception e) {
-                System.out.println("Erro ao enviar mensagem para o Slack");
-            }
         }
 
     }
