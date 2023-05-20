@@ -16,6 +16,7 @@ import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
 import com.github.britooo.looca.api.group.rede.RedeParametros;
 import com.github.britooo.looca.api.group.sistema.Sistema;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,6 +43,8 @@ public class MaquinaService {
     MaquinaRepository executar = new MaquinaRepository();
     ProcessosRepository executarProcesso = new ProcessosRepository();
 
+
+
     public void executarCadastro(Integer empresaId) {
         executar.cadastrarSistema(sistema);
         executar.cadastrarEndereco();
@@ -50,8 +53,7 @@ public class MaquinaService {
         executar.cadastrarComponente(processador, memoria, grupoDeDiscos, "memoria");
         executar.cadastrarComponente(processador, memoria, grupoDeDiscos, "disco");
 
-        Optional<RedeInterface> optRedeInterface = redeInterfaces.stream().filter(
-                r -> r.getBytesEnviados() > 0 || r.getBytesRecebidos() > 0).findFirst();
+        Optional<RedeInterface> optRedeInterface = redeInterfaces.stream().max(Comparator.comparingLong(RedeInterface::getBytesEnviados));
 
         RedeInterface redeInterface = optRedeInterface.get();
 
