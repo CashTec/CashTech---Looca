@@ -211,6 +211,13 @@ public class MonitorarService {
                     frase = ":warning::alphabet-yellow-a::alphabet-yellow-l::alphabet-yellow-e::alphabet-yellow-r::alphabet-yellow-t::alphabet-yellow-a::warning:\n" + frase;
                 }
 
+                try {
+                    JSONObject json = new JSONObject();
+                    json.put("text", frase);
+                    Slack.sendMessage(json);
+                } catch (Exception e) {
+                    System.out.println("Erro ao enviar mensagem para o Slack");
+                }
             }
 
         }
