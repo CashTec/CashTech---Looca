@@ -22,13 +22,11 @@ import java.util.Collections;
 
 import com.github.britooo.looca.api.util.Conversor;
 import org.json.JSONObject;
-import repositories.MonitorarRepository;
+import repositories.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-
-import repositories.ParametrizarRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -36,9 +34,7 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import repositories.ProcessosRepository;
 import models.Parametrizacao;
-import repositories.NotificacaoRepository;
 import slack.configuration.Slack;
 import slack.configuration.SlackRepository;
 
@@ -52,6 +48,8 @@ public class MonitorarService {
     ParametrizarRepository parametrizarRepository = new ParametrizarRepository();
     NotificacaoRepository notificacaoRepository = new NotificacaoRepository();
 
+    MaquinaRepository maquinaRepository = new MaquinaRepository();
+
     private Integer countSeconds = 6;
 
     public void monitorarHardware(Integer idAtm, Integer idEmpresaUsuario) {
@@ -61,6 +59,7 @@ public class MonitorarService {
         Integer idRede = monitorarRepository.verIdRede(idAtm).get(0);
         Integer idSistema = monitorarRepository.verIdSistema(idAtm).get(0);
         List<Map<String, Object>> idsVolume = monitorarRepository.verIdComponenteVolume(idAtm);
+        String identificador = maquinaRepository.buscarIdentificador(idAtm).get(0);
         SlackRepository slackRepository = new SlackRepository();
         slackRepository.pegarUrl();
 
@@ -124,7 +123,7 @@ public class MonitorarService {
                         bytesEnviadosAntigo == null ? 0 : redeInterface.getBytesEnviados() - bytesEnviadosAntigo, dtMetrica);
 
                 verificarMetricas(memoria, processador, volumeMonitorado,
-                        redeInterface, dtMetrica, idEmpresaUsuario);
+                        redeInterface, dtMetrica, idEmpresaUsuario, identificador);
 
                 bytesRecebidosAntigo = redeInterface.getBytesRecebidos();
                 bytesEnviadosAntigo = redeInterface.getBytesEnviados();
@@ -134,7 +133,8 @@ public class MonitorarService {
     }
 
     public void verificarMetricas(Memoria memoria, Processador processador,
-                                  Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificacao, Integer idEmpresaUsuario) {
+                                  Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificacao,
+                                  Integer idEmpresaUsuario, String identificador){
         if (isTwentySeconds()) {
 
             List<Parametrizacao> parametrizacao
@@ -222,15 +222,29 @@ public class MonitorarService {
 
                 String printFrase = frase.replaceAll(regex, "");
 
-                System.out.println(vermelho + alertaAscii + ANSI_RESET + printFrase);
+                String setas = azul + "=".repeat(67) + ANSI_RESET;
+
+                System.out.println(setas + vermelho + alertaAscii + ANSI_RESET + printFrase + "\n" + setas);
 
                 notificacaoRepository.enviarNotificacao(frase, idEmpresaUsuario, dtNotificacao);
 
+
                 if (isAlerta) {
                     //adicionar texto antes da frase
-                    frase = ":warning::alphabet-yellow-a::alphabet-yellow-l::alphabet-yellow-e::alphabet-yellow-r::alphabet-yellow-t::alphabet-yellow-a::warning:\n" + frase;
+                    frase = "\n\n:warning::alphabet-yellow-a::alphabet-yellow-l::alphabet-yellow-e::alphabet-yellow-r::alphabet-yellow-t::alphabet-yellow-a::warning:\n" + frase;
                 }
 
+                String setasSlack = "-".repeat(80);
+                String identificadorMsg = ":large_blue_diamond: :mechanic: Caixa eletrônico: " + identificador + "\n";
+                frase = setasSlack + "\n" + identificadorMsg + frase + "\n" + setasSlack;
+
+                try {
+                    JSONObject json = new JSONObject();
+                    json.put("text", frase);
+                    Slack.sendMessage(json);
+                } catch (Exception e) {
+                    System.out.println("Erro ao enviar mensagem para o Slack");
+                }
             }
 
         }

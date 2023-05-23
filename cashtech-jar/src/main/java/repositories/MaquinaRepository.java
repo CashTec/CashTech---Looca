@@ -268,4 +268,8 @@ public class MaquinaRepository {
                 break;
         }
     }
+    public List<String> buscarIdentificador(Integer idAtm) {
+        return con.query("SELECT identificador FROM CaixaEletronico WHERE id = " + idAtm, new SingleColumnRowMapper<>(String.class));
+    }
+
 }
