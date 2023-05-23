@@ -31,6 +31,11 @@ public class KillProcessosService {
     ProcessosRepository execute = new ProcessosRepository();
 
     public void monitorar(Integer idAtm, Integer idEmpresa) {
+        String vermelho = "\033[0;31m";
+        String azul = "\033[0;34m";
+
+        String ANSI_RESET = "\u001B[0m";
+
         // Verificar sistema operacional
         Boolean isLinux;
         if (sistema.getSistemaOperacional().equals("Windows")) {
@@ -60,9 +65,9 @@ public class KillProcessosService {
                             
                             ZonedDateTime horarioBrasilia = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
                             LocalDateTime dtMetrica = horarioBrasilia.toLocalDateTime();
-                            
-                            System.out.println("\nNome: " + processoLido.getNome());
-                            System.out.println("DataHora: " + dtMetrica);
+
+                            System.out.println("\nO processo " + vermelho + processoLido.getNome() + ANSI_RESET + " foi morto!");
+                            System.out.println(azul + "Data: " + ANSI_RESET + dtMetrica);
 
                             execute.cadastrarProcessoKilled(idAtm, processoLido, dtMetrica);
                         } catch (IOException e) {

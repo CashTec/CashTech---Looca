@@ -220,42 +220,7 @@ public class LoginSwing extends javax.swing.JFrame {
     //Pecisa usar o IoException pra caso dê problema não criação do arquivo
     //ou erro durante a leitura ou gravação de dados
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        String usuario = txtUsuario.getText();
-        String senha = txtSenha.getText();
 
-        List<Usuario> usuariosRetornado = loginService.verificarLogin(usuario, senha);
-
-        //Importar a classe File para poder criar um arquivo
-        if (usuario.isEmpty() || senha.isEmpty()) {
-            verificaLogin.setForeground(preto);
-            verificaLogin.setText("Complete todos os campos!");
-        } else if (usuariosRetornado.size() == 0) {
-            verificaLogin.setForeground(vermelho);
-            verificaLogin.setText("Usuário não encontrado!");
-            gerarLog.login(usuario, true);
-        } else {
-
-            gerarLog.login(usuario, false);
-
-            Usuario usuarioVerificado = usuariosRetornado.get(0);
-            System.out.println("Usuario: " + usuarioVerificado.getNome());
-            Integer idEmpresaUsuario = usuarioVerificado.getEmpresa_id();
-
-            verificaLogin.setForeground(verde);
-            verificaLogin.setText("Login efetuado com sucesso!");
-
-            Integer idEmpresa = usuarioVerificado.getEmpresa_id();
-            if (!loginService.hasMaquina()) {
-//                 Cadastrar Máquina
-                maquinaService.executarCadastro(idEmpresa);
-            }
-
-//             Identificar máquina e começar a monitorar o processo
-            Integer idAtm = maquinaService.identificarMaquina();
-
-            killProcessosService.monitorar(idAtm, idEmpresa);
-            monitorarService.monitorarHardware(idAtm, idEmpresaUsuario);
-        }
     }
 
     /**

@@ -151,6 +151,14 @@ public class MonitorarService {
             String bytesRecebidosConvertido = Conversor.formatarBytes(redeInterface.getBytesRecebidos());
             String bytesEnviadosConvertido = Conversor.formatarBytes(redeInterface.getBytesEnviados());
 
+            String verde = "\033[0;32m";
+            String vermelho = "\033[0;31m";
+            String azul = "\033[0;34m";
+            String roxo = "\033[0;35m";
+            String ciano = "\033[0;36m";
+            String amarelo = "\033[0;33m";
+            String ANSI_RESET = "\u001B[0m";
+
             //Verificando métricas de Memória
             if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
                 hasNotificacao = true;
@@ -202,7 +210,19 @@ public class MonitorarService {
             }
 
             if (hasNotificacao) {
-                System.out.println(frase);
+                // Regex para tirar :small_blue_diamond: e :small_orange_diamond: da frase
+                String regex = "(:small_blue_diamond:|:small_orange_diamond:)";
+                String alertaAscii = """
+                             _      _                 _             _\s
+                            / \\    | |   ___   _ __  | |_    __ _  | |
+                           / _ \\   | |  / _ \\ | '__| | __|  / _` | | |
+                          / ___ \\  | | |  __/ | |    | |_  | (_| | |_|
+                         /_/   \\_\\ |_|  \\___| |_|     \\__|  \\__,_| (_)
+                        """;
+
+                String printFrase = frase.replaceAll(regex, "");
+
+                System.out.println(vermelho + alertaAscii + ANSI_RESET + printFrase);
 
                 notificacaoRepository.enviarNotificacao(frase, idEmpresaUsuario, dtNotificacao);
 
