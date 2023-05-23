@@ -84,7 +84,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>cashtech.jar.LoginSwing</mainClass> 
+                            <mainClass>cashtech.jar.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

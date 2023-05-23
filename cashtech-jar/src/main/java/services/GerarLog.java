@@ -4,7 +4,9 @@
  */
 package services;
 
-import cashtech.jar.LoginSwing;
+
+import cashtech.jar.Main;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,9 +36,10 @@ public class GerarLog {
             try {
                 login.createNewFile();
             } catch (IOException ex) {
-                Logger.getLogger(LoginSwing.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
         String frase = "O usuário --" + usuario + "-- fez login";
 
         if (isErro) {
@@ -59,7 +62,7 @@ public class GerarLog {
         try {
             Files.write(Paths.get(login.getPath()), lista, StandardOpenOption.APPEND);
         } catch (IOException ex) {
-            Logger.getLogger(LoginSwing.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

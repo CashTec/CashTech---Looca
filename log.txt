@@ -102,3 +102,7 @@
 23/05/2023 10:15:51 O usuário --pedro-- fez login
 23/05/2023 10:18:54 O usuário --pedro-- fez login
 23/05/2023 10:19:54 O usuário --pedro-- fez login
+23/05/2023 16:34:17 Tentativa de login do usuário --abc-- 
+23/05/2023 16:34:26 O usuário --pedro-- fez login
+23/05/2023 16:37:16 Tentativa de login do usuário --dsfdfs-- 
+23/05/2023 16:37:21 O usuário --pedro-- fez login
