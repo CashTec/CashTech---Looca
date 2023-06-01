@@ -106,3 +106,18 @@
 23/05/2023 16:34:26 O usuário --pedro-- fez login
 23/05/2023 16:37:16 Tentativa de login do usuário --dsfdfs-- 
 23/05/2023 16:37:21 O usuário --pedro-- fez login
+24/05/2023 14:26:58 O usuário --pedro-- fez login
+24/05/2023 15:03:55 O usuário --pedro-- fez login
+24/05/2023 20:20:38 Tentativa de login do usuário --kbujbkjb-- 
+24/05/2023 20:20:43 O usuário --pedro-- fez login
+29/05/2023 16:33:22 O usuário --pedro-- fez login
+29/05/2023 16:36:15 O usuário --pedro-- fez login
+29/05/2023 16:46:55 O usuário --pedro-- fez login
+29/05/2023 16:54:38 O usuário --pedro-- fez login
+29/05/2023 17:50:51 O usuário --pedro-- fez login
+29/05/2023 19:04:55 O usuário --pedro-- fez login
+30/05/2023 08:45:41 O usuário --pedro-- fez login
+30/05/2023 13:15:25 O usuário --pedro-- fez login
+30/05/2023 14:34:49 O usuário --pedro-- fez login
+30/05/2023 15:46:01 O usuário --pedro-- fez login
+30/05/2023 17:03:25 O usuário --pedro-- fez login

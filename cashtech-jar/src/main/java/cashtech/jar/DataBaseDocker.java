@@ -15,7 +15,7 @@ public class DataBaseDocker {
 
     private String porta = "3306";
 
-    private String servidor = "localhost";
+    private String container = "localhost";
 
     private String bancoDeDados = "cashtech";
 
@@ -30,7 +30,7 @@ public class DataBaseDocker {
 
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
-        dataSource.setUrl(String.format("jdbc:mysql://%s:%s/%s?useTimezone=true&serverTimezone=UTC", servidor, porta, bancoDeDados));
+        dataSource.setUrl(String.format("jdbc:mysql://%s:%s/%s?useTimezone=true&serverTimezone=UTC", container, porta, bancoDeDados));
 
         dataSource.setUsername(login);
         dataSource.setPassword(senha);
