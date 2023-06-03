@@ -57,3 +57,18 @@
 19/05/2023 20:18:54 O usuário --pedro-- fez login
 19/05/2023 20:21:59 O usuário --pedro-- fez login
 19/05/2023 20:24:12 O usuário --pedro-- fez login
+02/06/2023 23:30:52 O usuário --pedro-- fez login
+02/06/2023 23:35:19 O usuário --pedro-- fez login
+02/06/2023 23:37:42 O usuário --pedro-- fez login
+02/06/2023 23:39:34 Tentativa de login do usuário --pedro-- 
+02/06/2023 23:39:59 Tentativa de login do usuário --pedro-- 
+02/06/2023 23:40:13 O usuário --pedro-- fez login
+02/06/2023 23:44:57 O usuário --pedro-- fez login
+02/06/2023 23:45:29 O usuário --pedro-- fez login
+02/06/2023 23:46:30 O usuário --pedro-- fez login
+02/06/2023 23:48:31 O usuário --pedro-- fez login
+02/06/2023 23:49:54 O usuário --pedro-- fez login
+02/06/2023 23:51:59 O usuário --pedro-- fez login
+02/06/2023 23:58:27 O usuário --pedro-- fez login
+03/06/2023 00:00:26 O usuário --pedro-- fez login
+03/06/2023 00:05:20 O usuário --pedro-- fez login

@@ -22,13 +22,11 @@ import java.util.Collections;
 
 import com.github.britooo.looca.api.util.Conversor;
 import org.json.JSONObject;
-import repositories.MonitorarRepository;
+import repositories.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-
-import repositories.ParametrizarRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -36,9 +34,7 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import repositories.ProcessosRepository;
 import models.Parametrizacao;
-import repositories.NotificacaoRepository;
 import slack.configuration.Slack;
 import slack.configuration.SlackRepository;
 
@@ -52,6 +48,8 @@ public class MonitorarService {
     ParametrizarRepository parametrizarRepository = new ParametrizarRepository();
     NotificacaoRepository notificacaoRepository = new NotificacaoRepository();
 
+    MaquinaRepository maquinaRepository = new MaquinaRepository();
+
     private Integer countSeconds = 6;
 
     public void monitorarHardware(Integer idAtm, Integer idEmpresaUsuario) {
@@ -63,6 +61,7 @@ public class MonitorarService {
         List<Map<String, Object>> idsVolume = monitorarRepository.verIdComponenteVolume(idAtm);
         SlackRepository slackRepository = new SlackRepository();
         slackRepository.pegarUrl();
+        String identificador = maquinaRepository.buscarIdentificador(idAtm).get(0);
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             Long bytesRecebidosAntigo = null;
@@ -124,7 +123,7 @@ public class MonitorarService {
                         bytesEnviadosAntigo == null ? 0 : redeInterface.getBytesEnviados() - bytesEnviadosAntigo, dtMetrica);
 
                 verificarMetricas(memoria, processador, volumeMonitorado,
-                        redeInterface, dtMetrica, idEmpresaUsuario);
+                        redeInterface, dtMetrica, idEmpresaUsuario, identificador);
 
                 bytesRecebidosAntigo = redeInterface.getBytesRecebidos();
                 bytesEnviadosAntigo = redeInterface.getBytesEnviados();
@@ -134,7 +133,8 @@ public class MonitorarService {
     }
 
     public void verificarMetricas(Memoria memoria, Processador processador,
-                                  Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificacao, Integer idEmpresaUsuario) {
+                                  Volume volume, RedeInterface redeInterface, LocalDateTime dtNotificacao,
+                                  Integer idEmpresaUsuario, String identificador){
         if (isTwentySeconds()) {
 
             List<Parametrizacao> parametrizacao
@@ -150,6 +150,14 @@ public class MonitorarService {
             String volumeConvertido = Conversor.formatarBytes(volume.getDisponivel());
             String bytesRecebidosConvertido = Conversor.formatarBytes(redeInterface.getBytesRecebidos());
             String bytesEnviadosConvertido = Conversor.formatarBytes(redeInterface.getBytesEnviados());
+
+            String verde = "\033[0;32m";
+            String vermelho = "\033[0;31m";
+            String azul = "\033[0;34m";
+            String roxo = "\033[0;35m";
+            String ciano = "\033[0;36m";
+            String amarelo = "\033[0;33m";
+            String ANSI_RESET = "\u001B[0m";
 
             //Verificando métricas de Memória
             if (memoria.getDisponivel() >= (usuario.getQtd_memoria_max() * 0.75)) {
@@ -202,14 +210,33 @@ public class MonitorarService {
             }
 
             if (hasNotificacao) {
-                System.out.println(frase);
+                // Regex para tirar :small_blue_diamond: e :small_orange_diamond: da frase
+                String regex = "(:small_blue_diamond:|:small_orange_diamond:)";
+                String alertaAscii = """
+                             _      _                 _             _\s
+                            / \\    | |   ___   _ __  | |_    __ _  | |
+                           / _ \\   | |  / _ \\ | '__| | __|  / _` | | |
+                          / ___ \\  | | |  __/ | |    | |_  | (_| | |_|
+                         /_/   \\_\\ |_|  \\___| |_|     \\__|  \\__,_| (_)
+                        """;
+
+                String printFrase = frase.replaceAll(regex, "");
+
+                String setas = azul + "=".repeat(67) + ANSI_RESET;
+
+                System.out.println(setas + vermelho + alertaAscii + ANSI_RESET + printFrase + "\n" + setas);
 
                 notificacaoRepository.enviarNotificacao(frase, idEmpresaUsuario, dtNotificacao);
 
+
                 if (isAlerta) {
                     //adicionar texto antes da frase
-                    frase = ":warning::alphabet-yellow-a::alphabet-yellow-l::alphabet-yellow-e::alphabet-yellow-r::alphabet-yellow-t::alphabet-yellow-a::warning:\n" + frase;
+                    frase = "\n\n:warning::alphabet-yellow-a::alphabet-yellow-l::alphabet-yellow-e::alphabet-yellow-r::alphabet-yellow-t::alphabet-yellow-a::warning:\n" + frase;
                 }
+
+                String setasSlack = "-".repeat(80);
+                String identificadorMsg = ":large_blue_diamond: :mechanic: Caixa eletrônico: " + identificador + "\n";
+                frase = setasSlack + "\n" + identificadorMsg + frase + "\n" + setasSlack;
 
                 try {
                     JSONObject json = new JSONObject();
@@ -223,7 +250,6 @@ public class MonitorarService {
         }
 
     }
-
     public Boolean isTwentySeconds() {
         countSeconds++;
         if (countSeconds == 7) {

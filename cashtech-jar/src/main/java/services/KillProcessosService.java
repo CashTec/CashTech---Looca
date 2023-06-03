@@ -60,7 +60,8 @@ public class KillProcessosService {
                             
                             ZonedDateTime horarioBrasilia = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
                             LocalDateTime dtMetrica = horarioBrasilia.toLocalDateTime();
-                            
+
+                            System.out.println("\nProcesso não permitido encontrado e morto!");
                             System.out.println("\nNome: " + processoLido.getNome());
                             System.out.println("DataHora: " + dtMetrica);
 

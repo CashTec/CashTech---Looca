@@ -38,6 +38,11 @@ public class LoginSwing extends javax.swing.JFrame {
     Color vermelho = new Color(128, 0, 0);
     Color preto = new Color(0, 0, 0);
 
+    Color roxo = new Color(102, 0, 102);
+
+    Color amarelo = new Color(255, 255, 0);
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -242,7 +247,7 @@ public class LoginSwing extends javax.swing.JFrame {
             Integer idEmpresaUsuario = usuarioVerificado.getEmpresa_id();
 
             verificaLogin.setForeground(verde);
-            verificaLogin.setText("Login efetuado com sucesso!");
+            verificaLogin.setText("Login efetuado com sucesso! Iniciando monitoramento...");
 
             Integer idEmpresa = usuarioVerificado.getEmpresa_id();
             if (!loginService.hasMaquina()) {
