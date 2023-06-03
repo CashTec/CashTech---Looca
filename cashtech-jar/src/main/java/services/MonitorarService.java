@@ -18,7 +18,7 @@ import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
 import com.github.britooo.looca.api.group.sistema.Sistema;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.*;
 
 import com.github.britooo.looca.api.util.Conversor;
 import org.json.JSONObject;
@@ -26,13 +26,6 @@ import repositories.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import models.Parametrizacao;
 import slack.configuration.Slack;
@@ -100,8 +93,8 @@ public class MonitorarService {
                     monitorarRepository.enviarMetrica(idVolume, dtMetrica, volumeMonitorado.getDisponivel());
                 }
 
-                Optional<RedeInterface> optRedeInterface = redeInterfaces.stream().filter(
-                        r -> r.getBytesEnviados() > 0 || r.getBytesRecebidos() > 0).findFirst();
+                Optional<RedeInterface> optRedeInterface = redeInterfaces.stream().max(Comparator.comparingLong(RedeInterface::getBytesEnviados));
+
 
                 RedeInterface redeInterface = optRedeInterface.get();
 
