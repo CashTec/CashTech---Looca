@@ -121,3 +121,9 @@
 30/05/2023 14:34:49 O usuário --pedro-- fez login
 30/05/2023 15:46:01 O usuário --pedro-- fez login
 30/05/2023 17:03:25 O usuário --pedro-- fez login
+04/06/2023 02:08:13 O usuário --pedro-- fez login
+04/06/2023 02:09:11 O usuário --pedro-- fez login
+04/06/2023 13:04:10 O usuário --pedro-- fez login
+04/06/2023 14:21:36 O usuário --pedro-- fez login
+04/06/2023 14:46:47 O usuário --pedro-- fez login
+06/06/2023 19:56:34 O usuário --pedro-- fez login

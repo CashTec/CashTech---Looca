@@ -55,6 +55,10 @@ public class KillProcessosService {
                 List<Processo> processosLido = grupoDeProcessos.getProcessos();
 
                 for (Processo processoLido : processosLido) {
+                    // se o processo começar com kworker/ não matar
+                    if (processoLido.getNome().startsWith("kworker/")) {
+                        continue;
+                    }
                     // Se o processo não for econtrado, executar kill
                     if (!processosPermitidos.contains(processoLido.getNome())) {
                         String comando = isLinux
